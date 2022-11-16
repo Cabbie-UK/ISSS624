@@ -1,0 +1,7 @@
+---
+title: "ISSS624"
+---
+
+Welcome to ISSS624 Applied Geospatial Analytics!
+
+On this webpage, I am going to share my learning journey on geospatial analytics.
