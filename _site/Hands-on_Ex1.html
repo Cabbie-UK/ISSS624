@@ -220,7 +220,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#choropleth-mapping-geospatial-data-using-tmap" id="toc-choropleth-mapping-geospatial-data-using-tmap" class="nav-link" data-scroll-target="#choropleth-mapping-geospatial-data-using-tmap">2.2 Choropleth Mapping Geospatial Data Using <em>tmap</em></a>
   <ul class="collapse">
   <li><a href="#quick-plot-using-qtm" id="toc-quick-plot-using-qtm" class="nav-link" data-scroll-target="#quick-plot-using-qtm">2.2.1 Quick plot using qtm()</a></li>
-  <li><a href="#create-a-choropleth-map-by-using-tmaps-elements" id="toc-create-a-choropleth-map-by-using-tmaps-elements" class="nav-link" data-scroll-target="#create-a-choropleth-map-by-using-tmaps-elements">2.2.2 Create a choropleth map by using <em>tmap</em>'s elements</a></li>
+  <li><a href="#create-a-choropleth-map-by-using-tmaps-elements" id="toc-create-a-choropleth-map-by-using-tmaps-elements" class="nav-link" data-scroll-target="#create-a-choropleth-map-by-using-tmaps-elements">2.2.2 Create a choropleth map by using <em>tmap</em>’s elements</a></li>
   <li><a href="#data-classification-methods-of-tmap" id="toc-data-classification-methods-of-tmap" class="nav-link" data-scroll-target="#data-classification-methods-of-tmap">2.2.3 Data classification methods of <strong>tmap</strong></a></li>
   <li><a href="#color-scheme" id="toc-color-scheme" class="nav-link" data-scroll-target="#color-scheme">2.2.4 Color Scheme</a></li>
   <li><a href="#map-layouts" id="toc-map-layouts" class="nav-link" data-scroll-target="#map-layouts">2.2.5 Map Layouts</a></li>
@@ -283,7 +283,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Linking to GEOS 3.9.3, GDAL 3.5.2, PROJ 8.2.1; sf_use_s2() is TRUE</code></pre>
+<pre><code>Linking to GEOS 3.9.1, GDAL 3.4.3, PROJ 7.2.1; sf_use_s2() is TRUE</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
@@ -904,7 +904,7 @@ Projected CRS: SVY21 / Singapore TM
 <p>Two data set will be used to create the choropleth map. They are:</p>
 <ul>
 <li><p>Master Plan 2014 Subzone Boundary (Web) (i.e.&nbsp;<code>MP14_SUBZONE_WEB_PL</code>) in ESRI shapefile format. It can be downloaded at <a href="https://data.gov.sg/">data.gov.sg</a> This is a geospatial data. It consists of the geographical boundary of Singapore at the planning subzone level. The data is based on URA Master Plan 2014.</p></li>
-<li><p>Singapore Residents by Planning Area / Subzone, Age Group, Sex and Type of Dwelling, June 2011-2020 in csv format (i.e.&nbsp;<code>respopagesextod2011to2020.csv</code>). This is an aspatial data fie. It can be downloaded at <a href="https://www.singstat.gov.sg/">Department of Statistics, Singapore</a> Although it does not contain any coordinates values, but it's PA and SZ fields can be used as unique identifiers to geocode to <code>MP14_SUBZONE_WEB_PL</code> shapefile.</p></li>
+<li><p>Singapore Residents by Planning Area / Subzone, Age Group, Sex and Type of Dwelling, June 2011-2020 in csv format (i.e.&nbsp;<code>respopagesextod2011to2020.csv</code>). This is an aspatial data fie. It can be downloaded at <a href="https://www.singstat.gov.sg/">Department of Statistics, Singapore</a> Although it does not contain any coordinates values, but it’s PA and SZ fields can be used as unique identifiers to geocode to <code>MP14_SUBZONE_WEB_PL</code> shapefile.</p></li>
 </ul>
 </section>
 <section id="import-geospatial-data-into-r" class="level3">
@@ -1077,13 +1077,13 @@ Call `lifecycle::last_lifecycle_warnings()` to see where this warning was genera
 </div>
 <p>Things to note from the code chunk above:</p>
 <ul>
-<li><p><em>tmap_mode()</em> with "plot" option is used to produce a static map. For interactive mode, "view" option should be used.</p></li>
+<li><p><em>tmap_mode()</em> with “plot” option is used to produce a static map. For interactive mode, “view” option should be used.</p></li>
 <li><p><em>fill</em> argument is used to map the attribute (i.e.&nbsp;DEPENDENCY)</p></li>
 </ul>
 </section>
 <section id="create-a-choropleth-map-by-using-tmaps-elements" class="level3">
-<h3 class="anchored" data-anchor-id="create-a-choropleth-map-by-using-tmaps-elements">2.2.2 Create a choropleth map by using <em>tmap</em>'s elements</h3>
-<p><em>qtm()</em> makes aesthetics of individual layers harder to control. To draw a high quality cartographic choropleth map as shown in the figure below, <strong>tmap</strong>'s drawing elements should be used.</p>
+<h3 class="anchored" data-anchor-id="create-a-choropleth-map-by-using-tmaps-elements">2.2.2 Create a choropleth map by using <em>tmap</em>’s elements</h3>
+<p><em>qtm()</em> makes aesthetics of individual layers harder to control. To draw a high quality cartographic choropleth map as shown in the figure below, <strong>tmap</strong>’s drawing elements should be used.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(mpsz_pop2020)<span class="sc">+</span></span>
 <span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"DEPENDENCY"</span>, </span>
@@ -1130,8 +1130,8 @@ Call `lifecycle::last_lifecycle_warnings()` to see where this warning was genera
 </div>
 <p>Things to note from <em>tm_polygons()</em>:</p>
 <ul>
-<li><p>The default interval binning used to draw the choropleth map is called "pretty". A detailed discussion of the data classification methods supported by <strong>tmap</strong> will be provided in sub-section <u>xx.</u></p></li>
-<li><p>The default colour scheme used is <code>YlOrRd</code> of ColorBrewer. You will learn more about the color scheme in sub-section <u>xx</u></p></li>
+<li><p>The default interval binning used to draw the choropleth map is called “pretty”. A detailed discussion of the data classification methods supported by <strong>tmap</strong> will be provided in sub-section 2.2.3.</p></li>
+<li><p>The default colour scheme used is <code>YlOrRd</code> of ColorBrewer. You will learn more about the color scheme in sub-section 2.2.4.</p></li>
 <li><p>By default, Missing value will be shaded in grey.</p></li>
 </ul>
 </section>
@@ -1161,7 +1161,7 @@ Call `lifecycle::last_lifecycle_warnings()` to see where this warning was genera
 <ol type="1">
 <li><p><em>col</em> = border colour,</p></li>
 <li><p><em>lwd</em> = border line width. The default is 1, and</p></li>
-<li><p><em>lty</em> = border line type. The default is "solid".</p></li>
+<li><p><em>lty</em> = border line type. The default is “solid”.</p></li>
 </ol>
 </section>
 </section>
@@ -1213,8 +1213,8 @@ Call `lifecycle::last_lifecycle_warnings()` to see where this warning was genera
 </div>
 </div>
 </section>
-<section id="plot-choropleth-map-with-custome-break" class="level4">
-<h4 class="anchored" data-anchor-id="plot-choropleth-map-with-custome-break">2.2.3.2 Plot choropleth map with custome break</h4>
+<section id="plot-choropleth-map-with-customise-break" class="level4">
+<h4 class="anchored" data-anchor-id="plot-choropleth-map-with-customise-break">2.2.3.2 Plot choropleth map with customise break</h4>
 <p>For all the built-in styles, the category breaks are computed internally. In order to override these defaults, the breakpoints can be set explicitly by means of the <em>breaks</em> argument to the <em>tm_fill()</em>. It is important to note that, in <strong>tmap</strong> the breaks include a minimum and maximum. As a result, in order to end up with n categories, n+1 elements must be specified in the <em>breaks</em> option (the values must be in increasing order).</p>
 <p>Before we get started, it is always a good practice to get some descriptive statistics on the variable before setting the break points. Code chunk below will be used to compute and display the descriptive statistics of <strong>DEPENDENCY</strong> field.</p>
 <div class="cell">
@@ -1254,7 +1254,7 @@ Call `lifecycle::last_lifecycle_warnings()` to see where this warning was genera
 <p><img src="Hands-on_Ex1_files/figure-html/unnamed-chunk-50-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>To reverse the colour shading, add a "-" prefix.</p>
+<p>To reverse the colour shading, add a “-” prefix.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(mpsz_pop2020)<span class="sc">+</span></span>
 <span id="cb86-2"><a href="#cb86-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"DEPENDENCY"</span>,</span>

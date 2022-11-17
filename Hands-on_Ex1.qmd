@@ -327,7 +327,7 @@ Two data set will be used to create the choropleth map. They are:
 
 -   Master Plan 2014 Subzone Boundary (Web) (i.e. `MP14_SUBZONE_WEB_PL`) in ESRI shapefile format. It can be downloaded at [data.gov.sg](https://data.gov.sg/) This is a geospatial data. It consists of the geographical boundary of Singapore at the planning subzone level. The data is based on URA Master Plan 2014.
 
--   Singapore Residents by Planning Area / Subzone, Age Group, Sex and Type of Dwelling, June 2011-2020 in csv format (i.e. `respopagesextod2011to2020.csv`). This is an aspatial data fie. It can be downloaded at [Department of Statistics, Singapore](https://www.singstat.gov.sg/) Although it does not contain any coordinates values, but it\'s PA and SZ fields can be used as unique identifiers to geocode to `MP14_SUBZONE_WEB_PL` shapefile.
+-   Singapore Residents by Planning Area / Subzone, Age Group, Sex and Type of Dwelling, June 2011-2020 in csv format (i.e. `respopagesextod2011to2020.csv`). This is an aspatial data fie. It can be downloaded at [Department of Statistics, Singapore](https://www.singstat.gov.sg/) Although it does not contain any coordinates values, but it's PA and SZ fields can be used as unique identifiers to geocode to `MP14_SUBZONE_WEB_PL` shapefile.
 
 ### 2.1.2 Import Geospatial Data into R
 
@@ -439,13 +439,13 @@ qtm(mpsz_pop2020,
 
 Things to note from the code chunk above:
 
--   *tmap_mode()* with \"plot\" option is used to produce a static map. For interactive mode, \"view\" option should be used.
+-   *tmap_mode()* with "plot" option is used to produce a static map. For interactive mode, "view" option should be used.
 
 -   *fill* argument is used to map the attribute (i.e. DEPENDENCY)
 
-### 2.2.2 Create a choropleth map by using *tmap*\'s elements
+### 2.2.2 Create a choropleth map by using *tmap*'s elements
 
-*qtm()* makes aesthetics of individual layers harder to control. To draw a high quality cartographic choropleth map as shown in the figure below, **tmap**\'s drawing elements should be used.
+*qtm()* makes aesthetics of individual layers harder to control. To draw a high quality cartographic choropleth map as shown in the figure below, **tmap**'s drawing elements should be used.
 
 ```{r}
 tm_shape(mpsz_pop2020)+
@@ -489,9 +489,9 @@ tm_shape(mpsz_pop2020)+
 
 Things to note from *tm_polygons()*:
 
--   The default interval binning used to draw the choropleth map is called \"pretty\". A detailed discussion of the data classification methods supported by **tmap** will be provided in sub-section [xx.]{.underline}
+-   The default interval binning used to draw the choropleth map is called "pretty". A detailed discussion of the data classification methods supported by **tmap** will be provided in sub-section 2.2.3.
 
--   The default colour scheme used is `YlOrRd` of ColorBrewer. You will learn more about the color scheme in sub-section [xx]{.underline}
+-   The default colour scheme used is `YlOrRd` of ColorBrewer. You will learn more about the color scheme in sub-section 2.2.4.
 
 -   By default, Missing value will be shaded in grey.
 
@@ -524,7 +524,7 @@ Beside *alpha* argument, there are three other arguments for *tm_borders()*, the
 
 2.  *lwd* = border line width. The default is 1, and
 
-3.  *lty* = border line type. The default is \"solid\".
+3.  *lty* = border line type. The default is "solid".
 
 ### 2.2.3 Data classification methods of **tmap**
 
@@ -576,7 +576,7 @@ tm_shape(mpsz_pop2020)+
   tm_borders(alpha = 0.5)
 ```
 
-#### 2.2.3.2 Plot choropleth map with custome break
+#### 2.2.3.2 Plot choropleth map with customise break
 
 For all the built-in styles, the category breaks are computed internally. In order to override these defaults, the breakpoints can be set explicitly by means of the *breaks* argument to the *tm_fill()*. It is important to note that, in **tmap** the breaks include a minimum and maximum. As a result, in order to end up with n categories, n+1 elements must be specified in the *breaks* option (the values must be in increasing order).
 
@@ -614,7 +614,7 @@ tm_shape(mpsz_pop2020)+
   tm_borders(alpha = 0.5)
 ```
 
-To reverse the colour shading, add a \"-\" prefix.
+To reverse the colour shading, add a "-" prefix.
 
 ```{r}
 tm_shape(mpsz_pop2020)+
