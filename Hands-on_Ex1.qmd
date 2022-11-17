@@ -24,9 +24,7 @@ Datasets are acquired from the following areas:
 
 -   Singapore Airbnb listing data, 19 July 2021 from [Inside Airbnb](http://insideairbnb.com/get-the-data.html)
 
-## 
-
-1.2 Getting Started
+## 1.2 Getting Started
 
 ### 1.2.1 Import libraries
 
