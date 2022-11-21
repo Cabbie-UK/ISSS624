@@ -43,9 +43,11 @@ When the input geospatial data is in shapefile format, two arguments will be use
 
 ```{r}
 mpsz = st_read(dsn = "Lesson1/data/geospatial", 
-                  layer = "MP14_SUBZONE_WEB_PL")
+                  layer = "MP14_SUBZONE_WEB_PL") # The dsn path is with reference to the .qmd document created to house this page
 
 ```
+
+From the results above, to check that we are using "Projected CRS" for the coordinates to be reflected in a 2-D space so that we can measure distance accurately.
 
 #### 1.2.2.2 Import polyline feature data in shapefile format
 

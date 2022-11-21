@@ -1,0 +1,133 @@
+---
+title: "In-Class Exercise 1"
+author: "KB_Kwa"
+editor: visual
+---
+
+Spatial Weights and Applications
+
+3.1 Overview
+
+Learn how to:
+
+1.  Compute spatial weights
+
+2.  Calculate spatial lagged variables
+
+using appropriate functions of spdep package.
+
+(Note: this above was part of an in-class exercise for ISSS624 conducted on 19 Nov 2022).
+
+3.2 Data available
+
+Two datasets are used in this exercise. They are:
+
+1.  Hunan county boundary layer. This is a geospatial data set in ESRI shapefile format.
+
+2.  Hunan_2012.csv: This csv file contains selected Hunan's local development indicators in 2012.
+
+3.3 Getting Started
+
+The code chunks below will install and load the 4 packages needed for this exericse.
+
+```{r}
+pacman::p_load(sf, tidyverse, spdep, tmap) # wrapper for install and load library
+```
+
+3.4 Import data into R for analysis
+
+3.4.1 Import shapefile whch contains Hunan county boundary layer
+
+The code chunk below will import ESRI shapefile into R
+
+```{r}
+hunan = st_read(dsn = "In-class_Ex01/data/geospatial", 
+                  layer = "hunan") # The dsn path is with reference to the .qmd document created to house this page
+```
+
+3.4.2 Import attribute data from csv file
+
+We import *Hunan_2012.csv* into R by using *read_csv()* of **readr** package. The output is R dataframe class
+
+```{r}
+hunan2012 = read_csv("In-class_Ex01/data/aspatial/Hunan_2012.csv", show_col_types = FALSE) 
+```
+
+Inspect the first rows of hunan2012
+
+```{r}
+head(hunan2012)
+```
+
+3.4.3 Perform relational join
+
+To combine the information in the shapefile and the attribute data, we perform a left_join (from dplyr package) using the county name that is available under *NAME_3* column of the Hunan shapefile and the *County* column n the Hunan attribute file
+
+```{r}
+hunan = left_join(hunan,hunan2012,
+                  by =c("NAME_3"="County"))
+```
+
+3.4.4 Visualise Regional Development Indicator
+
+We prepare a basemap and a choropleth map showing the distribution of GDP per capita (GDPPC) 2012 by using qtm() of tmap package
+
+```{r}
+basemap = tm_shape(hunan) +
+  tm_polygons() +
+  tm_text("NAME_3", size=0.35)
+
+gdppc =qtm(hunan, fill = "GDPPC",
+          legend.height = 0.25, 
+          legend.width = 0.35,
+          legend.outside = FALSE,
+          legend.position = c("right", "bottom")
+          )
+
+tmap_arrange(basemap, gdppc, asp=1, ncol=2)
+```
+
+3.5 Compute Contiguity Spatial Weights
+
+We use [*poly2nb()*](https://r-spatial.github.io/spdep/reference/poly2nb.html) of **spdep** package to compute contiguity weight matrices for the study area. The function builds a neighbours list based on regions with contiguous boundaries, that is sharing one or more boundary point. The function uses the Queen criteria by default.
+
+3.5.1 Compute contiguity based neighbors using Queen criteria
+
+The code chunk below is used to compute Queen contiguity weight matrix.
+
+```{r}
+wm_q <- poly2nb(hunan, queen=TRUE)
+summary(wm_q)
+```
+
+The summary report above shows that there are 88 area units in Hunan.
+
+There are two area units - regions 30 and 65 - with only one neighbors.
+
+The most connected area unit - region 85 - has 11 neighbors.
+
+For each polygon in our polygon object, *wm_q* lists all neighboring polygons. For example, to see the neighbors for the first polygon in the object, type:
+
+```{r}
+wm_q[[1]]
+```
+
+Polygon 1 has 5 neighbors. The numbers represent the polygon IDs as stored in hunan SpatialPolygonsDataFrame class.
+
+We can retrive the county name of Polygon ID=1 by using the code chunk below:
+
+```{r}
+hunan$County[1]
+```
+
+To reveal the county names of the five neighboring polygons, we can use the following code chunk:
+
+```{r}
+hunan$NAME_3[wm_q[[1]]]
+```
+
+or
+
+```{r}
+hunan$NAME_3[c(2,3,4,57,85)]
+```

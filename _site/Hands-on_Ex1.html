@@ -283,7 +283,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Linking to GEOS 3.9.1, GDAL 3.4.3, PROJ 7.2.1; sf_use_s2() is TRUE</code></pre>
+<pre><code>Linking to GEOS 3.9.3, GDAL 3.5.2, PROJ 8.2.1; sf_use_s2() is TRUE</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
@@ -309,7 +309,7 @@ tidyverse 1.3.2 ──</code></pre>
 <p>When the input geospatial data is in shapefile format, two arguments will be used, namely: <code>dsn</code> to define the data path and <code>layer</code> to provide the shapefile name. Also note that no extension such as .shp, .dbf, .prj and .shx are needed.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>mpsz <span class="ot">=</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"Lesson1/data/geospatial"</span>, </span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">layer =</span> <span class="st">"MP14_SUBZONE_WEB_PL"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">layer =</span> <span class="st">"MP14_SUBZONE_WEB_PL"</span>) <span class="co"># The dsn path is with reference to the .qmd document created to house this page</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Reading layer `MP14_SUBZONE_WEB_PL' from data source 
   `C:\Cabbie-UK\ISSS624\Lesson1\data\geospatial' using driver `ESRI Shapefile'
@@ -320,6 +320,7 @@ Bounding box:  xmin: 2667.538 ymin: 15748.72 xmax: 56396.44 ymax: 50256.33
 Projected CRS: SVY21</code></pre>
 </div>
 </div>
+<p>From the results above, to check that we are using “Projected CRS” for the coordinates to be reflected in a 2-D space so that we can measure distance accurately.</p>
 </section>
 <section id="import-polyline-feature-data-in-shapefile-format" class="level4">
 <h4 class="anchored" data-anchor-id="import-polyline-feature-data-in-shapefile-format">1.2.2.2 Import polyline feature data in shapefile format</h4>
