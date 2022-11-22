@@ -522,7 +522,7 @@ tmap_arrange(gdppc, lag_sum_gdppc, asp=1, ncol=2)
 
 The spatial window average uses row-standardized weights and includes the diagonal element. To do this in R, we need to go back to the neighbors structure and add the diagonal element (the data points for the county itself) before assigning weights.
 
-![](images/paste-A65D1629.png)
+![](images/paste-CEC39989.png)
 
 We first assign wm_q to a new variable because we will directly alter its structure to add the diagonal elements.
 
