@@ -180,7 +180,48 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#spatial-weights-and-applications" id="toc-spatial-weights-and-applications" class="nav-link active" data-scroll-target="#spatial-weights-and-applications">Spatial Weights and Applications</a>
+  <ul class="collapse">
+  <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview">3.1 Overview</a></li>
+  <li><a href="#data-available" id="toc-data-available" class="nav-link" data-scroll-target="#data-available">3.2 Data available</a></li>
+  <li><a href="#getting-started" id="toc-getting-started" class="nav-link" data-scroll-target="#getting-started">3.3 Getting Started</a></li>
+  <li><a href="#import-data-into-r-for-analysis" id="toc-import-data-into-r-for-analysis" class="nav-link" data-scroll-target="#import-data-into-r-for-analysis">3.4 Import data into R for analysis</a>
+  <ul class="collapse">
+  <li><a href="#import-shapefile-whch-contains-hunan-county-boundary-layer" id="toc-import-shapefile-whch-contains-hunan-county-boundary-layer" class="nav-link" data-scroll-target="#import-shapefile-whch-contains-hunan-county-boundary-layer">3.4.1 Import shapefile whch contains Hunan county boundary layer</a></li>
+  <li><a href="#import-attribute-data-from-csv-file" id="toc-import-attribute-data-from-csv-file" class="nav-link" data-scroll-target="#import-attribute-data-from-csv-file">3.4.2 Import attribute data from csv file</a></li>
+  <li><a href="#perform-relational-join" id="toc-perform-relational-join" class="nav-link" data-scroll-target="#perform-relational-join">3.4.3 Perform relational join</a></li>
+  <li><a href="#visualise-regional-development-indicator" id="toc-visualise-regional-development-indicator" class="nav-link" data-scroll-target="#visualise-regional-development-indicator">3.4.4 Visualise Regional Development Indicator</a></li>
+  </ul></li>
+  <li><a href="#compute-contiguity-spatial-weights" id="toc-compute-contiguity-spatial-weights" class="nav-link" data-scroll-target="#compute-contiguity-spatial-weights">3.5 Compute Contiguity Spatial Weights</a>
+  <ul class="collapse">
+  <li><a href="#compute-contiguity-based-neighbors-using-queen-method" id="toc-compute-contiguity-based-neighbors-using-queen-method" class="nav-link" data-scroll-target="#compute-contiguity-based-neighbors-using-queen-method">3.5.1 Compute contiguity based neighbors using Queen method</a></li>
+  <li><a href="#compute-contiguity-based-neighbors-using-rook-method" id="toc-compute-contiguity-based-neighbors-using-rook-method" class="nav-link" data-scroll-target="#compute-contiguity-based-neighbors-using-rook-method">3.5.2 Compute contiguity based neighbors using Rook method</a></li>
+  <li><a href="#visualise-contiguity-weights-using-a-connectivity-graph" id="toc-visualise-contiguity-weights-using-a-connectivity-graph" class="nav-link" data-scroll-target="#visualise-contiguity-weights-using-a-connectivity-graph">3.5.3 Visualise contiguity weights using a Connectivity Graph</a></li>
+  </ul></li>
+  <li><a href="#compute-distance-based-neighbors" id="toc-compute-distance-based-neighbors" class="nav-link" data-scroll-target="#compute-distance-based-neighbors">3.6 Compute distance based neighbors</a>
+  <ul class="collapse">
+  <li><a href="#determine-the-cut-off-distance" id="toc-determine-the-cut-off-distance" class="nav-link" data-scroll-target="#determine-the-cut-off-distance">3.6.1 Determine the cut-off distance</a></li>
+  <li><a href="#compute-fixed-distance-weight-matrix" id="toc-compute-fixed-distance-weight-matrix" class="nav-link" data-scroll-target="#compute-fixed-distance-weight-matrix">3.6.2 Compute fixed distance weight matrix</a></li>
+  <li><a href="#compute-adaptive-distance-weight-matrix" id="toc-compute-adaptive-distance-weight-matrix" class="nav-link" data-scroll-target="#compute-adaptive-distance-weight-matrix">3.6.3 Compute adaptive distance weight matrix</a></li>
+  </ul></li>
+  <li><a href="#weights-based-on-inversed-distance-method" id="toc-weights-based-on-inversed-distance-method" class="nav-link" data-scroll-target="#weights-based-on-inversed-distance-method">3.7 Weights based on Inversed Distance method</a>
+  <ul class="collapse">
+  <li><a href="#row-standard-weight-matrix-rswm" id="toc-row-standard-weight-matrix-rswm" class="nav-link" data-scroll-target="#row-standard-weight-matrix-rswm">3.7.1 Row-standard weight matrix (rswm)</a></li>
+  </ul></li>
+  <li><a href="#application-of-spatial-weight-matrix" id="toc-application-of-spatial-weight-matrix" class="nav-link" data-scroll-target="#application-of-spatial-weight-matrix">3.8 Application of Spatial Weight Matrix</a>
+  <ul class="collapse">
+  <li><a href="#spatial-lag-with-row-standardized-weights" id="toc-spatial-lag-with-row-standardized-weights" class="nav-link" data-scroll-target="#spatial-lag-with-row-standardized-weights">3.8.1 Spatial lag with row-standardized weights</a></li>
+  <li><a href="#spatial-lag-as-a-sum-of-neighboring-values" id="toc-spatial-lag-as-a-sum-of-neighboring-values" class="nav-link" data-scroll-target="#spatial-lag-as-a-sum-of-neighboring-values">3.8.2 Spatial lag as a sum of neighboring values</a></li>
+  <li><a href="#spatial-window-average" id="toc-spatial-window-average" class="nav-link" data-scroll-target="#spatial-window-average">3.8.3 Spatial window average</a></li>
+  <li><a href="#spatial-window-sum" id="toc-spatial-window-sum" class="nav-link" data-scroll-target="#spatial-window-sum">3.8.4 Spatial window sum</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -207,8 +248,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
-<p>Spatial Weights and Applications</p>
-<p>3.1 Overview</p>
+<section id="spatial-weights-and-applications" class="level1">
+<h1>Spatial Weights and Applications</h1>
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">3.1 Overview</h2>
 <p>Learn how to:</p>
 <ol type="1">
 <li><p>Compute spatial weights</p></li>
@@ -216,19 +259,26 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ol>
 <p>using appropriate functions of spdep package.</p>
 <p>(Note: this above was part of an in-class exercise for ISSS624 conducted on 19 Nov 2022).</p>
-<p>3.2 Data available</p>
+</section>
+<section id="data-available" class="level2">
+<h2 class="anchored" data-anchor-id="data-available">3.2 Data available</h2>
 <p>Two datasets are used in this exercise. They are:</p>
 <ol type="1">
 <li><p>Hunan county boundary layer. This is a geospatial data set in ESRI shapefile format.</p></li>
 <li><p>Hunan_2012.csv: This csv file contains selected Hunan’s local development indicators in 2012.</p></li>
 </ol>
-<p>3.3 Getting Started</p>
+</section>
+<section id="getting-started" class="level2">
+<h2 class="anchored" data-anchor-id="getting-started">3.3 Getting Started</h2>
 <p>The code chunks below will install and load the 4 packages needed for this exericse.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(sf, tidyverse, spdep, tmap) <span class="co"># wrapper for install and load library</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>3.4 Import data into R for analysis</p>
-<p>3.4.1 Import shapefile whch contains Hunan county boundary layer</p>
+</section>
+<section id="import-data-into-r-for-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="import-data-into-r-for-analysis">3.4 Import data into R for analysis</h2>
+<section id="import-shapefile-whch-contains-hunan-county-boundary-layer" class="level3">
+<h3 class="anchored" data-anchor-id="import-shapefile-whch-contains-hunan-county-boundary-layer">3.4.1 Import shapefile whch contains Hunan county boundary layer</h3>
 <p>The code chunk below will import ESRI shapefile into R</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>hunan <span class="ot">=</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"In-Class_Ex1/data/geospatial"</span>, </span>
@@ -244,7 +294,9 @@ Bounding box:  xmin: 108.7831 ymin: 24.6342 xmax: 114.2544 ymax: 30.12812
 Geodetic CRS:  WGS 84</code></pre>
 </div>
 </div>
-<p>3.4.2 Import attribute data from csv file</p>
+</section>
+<section id="import-attribute-data-from-csv-file" class="level3">
+<h3 class="anchored" data-anchor-id="import-attribute-data-from-csv-file">3.4.2 Import attribute data from csv file</h3>
 <p>We import <em>Hunan_2012.csv</em> into R by using <em>read_csv()</em> of <strong>readr</strong> package. The output is R dataframe class</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>hunan2012 <span class="ot">=</span> <span class="fu">read_csv</span>(<span class="st">"In-Class_Ex1/data/aspatial/Hunan_2012.csv"</span>, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -269,13 +321,17 @@ Geodetic CRS:  WGS 84</code></pre>
 #   abbreviated variable names ¹​avg_wage, ²​deposite</code></pre>
 </div>
 </div>
-<p>3.4.3 Perform relational join</p>
+</section>
+<section id="perform-relational-join" class="level3">
+<h3 class="anchored" data-anchor-id="perform-relational-join">3.4.3 Perform relational join</h3>
 <p>To combine the information in the shapefile and the attribute data, we perform a left_join (from dplyr package) using the county name that is available under <em>NAME_3</em> column of the Hunan shapefile and the <em>County</em> column n the Hunan attribute file</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>hunan <span class="ot">=</span> <span class="fu">left_join</span>(hunan,hunan2012,</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">by =</span><span class="fu">c</span>(<span class="st">"NAME_3"</span><span class="ot">=</span><span class="st">"County"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>3.4.4 Visualise Regional Development Indicator</p>
+</section>
+<section id="visualise-regional-development-indicator" class="level3">
+<h3 class="anchored" data-anchor-id="visualise-regional-development-indicator">3.4.4 Visualise Regional Development Indicator</h3>
 <p>We prepare a basemap and a choropleth map showing the distribution of GDP per capita (GDPPC) 2012 by using qtm() of tmap package</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>basemap <span class="ot">=</span> <span class="fu">tm_shape</span>(hunan) <span class="sc">+</span></span>
@@ -300,9 +356,13 @@ Geodetic CRS:  WGS 84</code></pre>
 <p><img src="In-Class_Ex1_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>3.5 Compute Contiguity Spatial Weights</p>
+</section>
+</section>
+<section id="compute-contiguity-spatial-weights" class="level2">
+<h2 class="anchored" data-anchor-id="compute-contiguity-spatial-weights">3.5 Compute Contiguity Spatial Weights</h2>
 <p>We will use <a href="https://r-spatial.github.io/spdep/reference/poly2nb.html"><em>poly2nb()</em></a> of <strong>spdep</strong> package to compute contiguity weight matrices. The function builds a neighbours list based on regions with contiguous boundaries, that is sharing one or more boundary point. The function uses the Queen criteria by default (see section 3.5.3 to use the Rook criteria).</p>
-<p>3.5.1 Compute contiguity based neighbors using Queen method</p>
+<section id="compute-contiguity-based-neighbors-using-queen-method" class="level3">
+<h3 class="anchored" data-anchor-id="compute-contiguity-based-neighbors-using-queen-method">3.5.1 Compute contiguity based neighbors using Queen method</h3>
 <p>The code chunk below is used to compute Queen contiguity weight matrix.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>wm_q <span class="ot">&lt;-</span> <span class="fu">poly2nb</span>(hunan, <span class="at">queen=</span><span class="cn">TRUE</span>)</span>
@@ -326,7 +386,8 @@ Link number distribution:
 <p>The summary report above shows that there are 88 area units in Hunan.</p>
 <p>There are two area units - regions 30 and 65 - with only one neighbor.</p>
 <p>The most connected area unit - region 85 - has 11 neighbors.</p>
-<p>3.5.1.1 List all neighboring polygons</p>
+<section id="list-all-neighboring-polygons" class="level4">
+<h4 class="anchored" data-anchor-id="list-all-neighboring-polygons">3.5.1.1 List all neighboring polygons</h4>
 <p>For example, to see the neighbors for the first polygon in the object, type:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>wm_q[[<span class="dv">1</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -335,7 +396,9 @@ Link number distribution:
 </div>
 </div>
 <p>Polygon 1 has 5 neighbors. The numbers represent the polygon IDs as stored in hunan SpatialPolygonsDataFrame class.</p>
-<p>3.5.1.2 Retrieve the county name of Polygon ID=1</p>
+</section>
+<section id="retrieve-the-county-name-of-polygon-id1" class="level4">
+<h4 class="anchored" data-anchor-id="retrieve-the-county-name-of-polygon-id1">3.5.1.2 Retrieve the county name of Polygon ID=1</h4>
 <p>We can use the following code chunk below:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>hunan<span class="sc">$</span>County[<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -343,7 +406,9 @@ Link number distribution:
 <pre><code>[1] "Anxiang"</code></pre>
 </div>
 </div>
-<p>3.5.1.3 Review the county names of neighboring ploygons</p>
+</section>
+<section id="review-the-county-names-of-neighboring-ploygons" class="level4">
+<h4 class="anchored" data-anchor-id="review-the-county-names-of-neighboring-ploygons">3.5.1.3 Review the county names of neighboring ploygons</h4>
 <p>We can use the following code chunk:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>hunan<span class="sc">$</span>NAME_3[wm_q[[<span class="dv">1</span>]]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -358,7 +423,9 @@ Link number distribution:
 <pre><code>[1] "Hanshou" "Jinshi"  "Li"      "Nan"     "Taoyuan"</code></pre>
 </div>
 </div>
-<p>3.5.1.4 Retrieve the GDPPC of the neighboring counties</p>
+</section>
+<section id="retrieve-the-gdppc-of-the-neighboring-counties" class="level4">
+<h4 class="anchored" data-anchor-id="retrieve-the-gdppc-of-the-neighboring-counties">3.5.1.4 Retrieve the GDPPC of the neighboring counties</h4>
 <p>We can use the code chunk below.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>nb1 <span class="ot">=</span> wm_q[[<span class="dv">1</span>]]</span>
@@ -368,7 +435,9 @@ Link number distribution:
 <pre><code>[1] 20981 34592 24473 21311 22879</code></pre>
 </div>
 </div>
-<p>3.5.1.5 Display the weight matrix of all the 88 area units by using the str() method</p>
+</section>
+<section id="display-the-weight-matrix-of-all-the-88-counties-by-using-the-str-method" class="level4">
+<h4 class="anchored" data-anchor-id="display-the-weight-matrix-of-all-the-88-counties-by-using-the-str-method">3.5.1.5 Display the weight matrix of all the 88 counties by using the str() method</h4>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(wm_q)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -468,7 +537,10 @@ Link number distribution:
  - attr(*, "sym")= logi TRUE</code></pre>
 </div>
 </div>
-<p>3.5.2 Compute contiguity based neighbors using Rook method</p>
+</section>
+</section>
+<section id="compute-contiguity-based-neighbors-using-rook-method" class="level3">
+<h3 class="anchored" data-anchor-id="compute-contiguity-based-neighbors-using-rook-method">3.5.2 Compute contiguity based neighbors using Rook method</h3>
 <p>The code chunk below is used to compute Rook contiguity weight matrix.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>wm_r <span class="ot">&lt;-</span> <span class="fu">poly2nb</span>(hunan, <span class="at">queen=</span><span class="cn">FALSE</span>)</span>
@@ -490,9 +562,12 @@ Link number distribution:
 </div>
 </div>
 <p>The summary report above shows that there are 88 area units in Hunan. Similar to the Queen’s method, the most connected area unit - Region 85 - has 10 neighbors. Two area units - Regions 30 and 65 - only have 1 neighbor.</p>
-<p>3.5.3 Visualise contiguity weights using a Connectivity Graph</p>
+</section>
+<section id="visualise-contiguity-weights-using-a-connectivity-graph" class="level3">
+<h3 class="anchored" data-anchor-id="visualise-contiguity-weights-using-a-connectivity-graph">3.5.3 Visualise contiguity weights using a Connectivity Graph</h3>
 <p>A connectivity graph takes a point and displays a line to each neighboring point. For polygons, we will typically use the polygon centroids as the connecting points.</p>
-<p>3.5.3.1 Prepare the latitude and longitude of the Polygon Centroids om a separate data frame</p>
+<section id="prepare-the-latitude-and-longitude-of-the-polygon-centroids-om-a-separate-data-frame" class="level4">
+<h4 class="anchored" data-anchor-id="prepare-the-latitude-and-longitude-of-the-polygon-centroids-om-a-separate-data-frame">3.5.3.1 Prepare the latitude and longitude of the Polygon Centroids om a separate data frame</h4>
 <p>To do so, we will use a mapping function to apply the st_centroid method on the geometry column of each area unit/county.</p>
 <p>To get the longitude values, we map the st_centroid function over the geometry column of hunan and access the longitude value through double bracket notation [[]] and 1. This allows us to get only the longitude, which is the first value in each centroid.</p>
 <div class="cell">
@@ -519,7 +594,9 @@ Link number distribution:
 [6,]  111.0341 29.79863</code></pre>
 </div>
 </div>
-<p>3.5.3.2 Plot Connectivity Map with Queen contiguity</p>
+</section>
+<section id="plot-connectivity-map-with-queen-contiguity" class="level4">
+<h4 class="anchored" data-anchor-id="plot-connectivity-map-with-queen-contiguity">3.5.3.2 Plot Connectivity Map with Queen contiguity</h4>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the base layer</span></span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(hunan<span class="sc">$</span>geometry, <span class="at">border=</span><span class="st">"lightgrey"</span>) </span>
@@ -532,7 +609,9 @@ Link number distribution:
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># pch refers to the point symbol (dot)</span></span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="co"># cex refers to the point size</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>3.5.3.3 Plot Connectivity Map using Rook contiguity</p>
+</section>
+<section id="plot-connectivity-map-using-rook-contiguity" class="level4">
+<h4 class="anchored" data-anchor-id="plot-connectivity-map-using-rook-contiguity">3.5.3.3 Plot Connectivity Map using Rook contiguity</h4>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(hunan<span class="sc">$</span>geometry, <span class="at">border=</span><span class="st">"lightgrey"</span>)</span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(wm_r, coords, <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">cex =</span> <span class="fl">0.6</span>, <span class="at">add =</span> <span class="cn">TRUE</span>, <span class="at">col =</span> <span class="st">"blue"</span>)</span>
@@ -541,7 +620,9 @@ Link number distribution:
 <p><img src="In-Class_Ex1_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>3.5.3.4 Plot Connectivity Map using Queen and Rook contiguity</p>
+</section>
+<section id="plot-connectivity-map-using-queen-and-rook-contiguity" class="level4">
+<h4 class="anchored" data-anchor-id="plot-connectivity-map-using-queen-and-rook-contiguity">3.5.3.4 Plot Connectivity Map using Queen and Rook contiguity</h4>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(hunan<span class="sc">$</span>geometry, <span class="at">border=</span><span class="st">"lightgrey"</span>)</span>
@@ -554,9 +635,14 @@ Link number distribution:
 <p><img src="In-Class_Ex1_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>3.6 Compute distance based neighbors</p>
+</section>
+</section>
+</section>
+<section id="compute-distance-based-neighbors" class="level2">
+<h2 class="anchored" data-anchor-id="compute-distance-based-neighbors">3.6 Compute distance based neighbors</h2>
 <p>We will use the <a href="https://r-spatial.github.io/spdep/reference/dnearneigh.html"><em>dnearneigh()</em></a> of <strong>spdep</strong> package to derive distance-based weight matrices . The function identifies neighbours of region points by Euclidean distance with a distance band with lower distance bound (d1), and upper distance bound (d2).</p>
-<p>3.6.1 Determine the cut-off distance</p>
+<section id="determine-the-cut-off-distance" class="level3">
+<h3 class="anchored" data-anchor-id="determine-the-cut-off-distance">3.6.1 Determine the cut-off distance</h3>
 <p>We need to determine the upper limit for distance band by using the steps below so that all area units will have at least 1 neighbor:</p>
 <ul>
 <li><p>Return a matrix with the indices of points belonging to the set of the k nearest neighbours of each other by using <a href="https://r-spatial.github.io/spdep/reference/knearneigh.html"><em>knearneigh()</em></a> of <strong>spdep</strong>. By default k=1 and we can set this argument value explicitly.</p></li>
@@ -567,18 +653,23 @@ Link number distribution:
 <div class="cell">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Covers the first 2 points above to prepare a list of nearest neighbor for each area unit</span></span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>k1 <span class="ot">=</span> <span class="fu">knn2nb</span>(<span class="fu">knearneigh</span>(coords,<span class="at">k=</span><span class="dv">1</span>))</span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Covers the 3rd and 4th point above to return a vecotor of distances between the area unit and its nearest neighbor</span></span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>k1dists <span class="ot">&lt;-</span> <span class="fu">unlist</span>(<span class="fu">nbdists</span>(k1, coords, <span class="at">longlat =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Summarise the results</span></span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(k1dists)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Covers the 3rd and 4th point above to return a vecotor of distances between the area unit and its nearest neighbor</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>k1dists <span class="ot">&lt;-</span> <span class="fu">unlist</span>(<span class="fu">nbdists</span>(k1, coords, <span class="at">longlat =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="co">#Summarise the results</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(k1dists)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
   24.79   32.57   38.01   39.07   44.52   61.79 </code></pre>
 </div>
 </div>
 <p>The summary report shows that the largest first nearest neighbor distance is 61.79 km. This will be used as the upper threshold to provide certainty that all units will have at least one neighbor.</p>
-<p>3.6.2 Compute fixed distance weight matrix</p>
-<p>3.6.2.1 Compute the distance weight matrix by using <em>dnearneigh()</em></p>
+</section>
+<section id="compute-fixed-distance-weight-matrix" class="level3">
+<h3 class="anchored" data-anchor-id="compute-fixed-distance-weight-matrix">3.6.2 Compute fixed distance weight matrix</h3>
+<section id="compute-the-distance-weight-matrix-by-using-dnearneigh" class="level4">
+<h4 class="anchored" data-anchor-id="compute-the-distance-weight-matrix-by-using-dnearneigh">3.6.2.1 Compute the distance weight matrix by using <em>dnearneigh()</em></h4>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>wm_d62 <span class="ot">=</span> <span class="fu">dnearneigh</span>(coords, <span class="dv">0</span>, <span class="dv">62</span>, <span class="at">longlat =</span> <span class="cn">TRUE</span>) <span class="co"># longlat = TRUE if point coordinates are geographical longitude-latitude decimal degrees, in which case distances are measured in kilometers</span></span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -592,7 +683,9 @@ Average number of links: 3.681818 </code></pre>
 </div>
 </div>
 <p>Based on the above, within a distance of 62 km for each area unit, the average number of links or connections that the area units have is 3.7.</p>
-<p>3.6.2.2 Display the content of wm_d62 weight matrix using str()</p>
+</section>
+<section id="display-the-content-of-wm_d62-weight-matrix-using-str" class="level4">
+<h4 class="anchored" data-anchor-id="display-the-content-of-wm_d62-weight-matrix-using-str">3.6.2.2 Display the content of wm_d62 weight matrix using str()</h4>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(wm_d62)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -694,7 +787,9 @@ Average number of links: 3.681818 </code></pre>
  - attr(*, "sym")= logi TRUE</code></pre>
 </div>
 </div>
-<p>3.6.2.3 Alternative way to display the structure of the weight matrix by using <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/table"><em>table()</em></a> and <a href="https://r-spatial.github.io/spdep/reference/card.html"><em>card()</em></a> of spdep</p>
+</section>
+<section id="alternative-way-to-display-the-structure-of-the-weight-matrix-by-using-table-and-card-of-spdep" class="level4">
+<h4 class="anchored" data-anchor-id="alternative-way-to-display-the-structure-of-the-weight-matrix-by-using-table-and-card-of-spdep">3.6.2.3 Alternative way to display the structure of the weight matrix by using <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/table"><em>table()</em></a> and <a href="https://r-spatial.github.io/spdep/reference/card.html"><em>card()</em></a> of <strong>spdep</strong></h4>
 <p>The function <em>card(nb)</em> is used to extract the number of neighbors from a “nb” object. The table function tabulates the count results</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(hunan<span class="sc">$</span>County, <span class="fu">card</span>(wm_d62))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -810,7 +905,9 @@ Average number of links: 3.681818 </code></pre>
 88 </code></pre>
 </div>
 </div>
-<p>3.6.2.4 Plot fixed distance weight matrix</p>
+</section>
+<section id="plot-fixed-distance-weight-matrix" class="level4">
+<h4 class="anchored" data-anchor-id="plot-fixed-distance-weight-matrix">3.6.2.4 Plot fixed distance weight matrix</h4>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(hunan<span class="sc">$</span>geometry, <span class="at">border=</span><span class="st">"lightgrey"</span>)</span>
 <span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(wm_d62, coords, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
@@ -835,7 +932,10 @@ Average number of links: 3.681818 </code></pre>
 <p><img src="In-Class_Ex1_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>3.6.3 Compute adaptive distance weight matrix</p>
+</section>
+</section>
+<section id="compute-adaptive-distance-weight-matrix" class="level3">
+<h3 class="anchored" data-anchor-id="compute-adaptive-distance-weight-matrix">3.6.3 Compute adaptive distance weight matrix</h3>
 <p>To control the numbers of neighbors directly using k-nearest neighbors, we can tweak the k argument in the <em>knearneigh()</em> function.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>knn6 <span class="ot">&lt;-</span> <span class="fu">knn2nb</span>(<span class="fu">knearneigh</span>(coords, <span class="at">k=</span><span class="dv">6</span>))</span>
@@ -950,7 +1050,8 @@ Non-symmetric neighbours list</code></pre>
  - attr(*, "class")= chr "nb"</code></pre>
 </div>
 </div>
-<p>3.6.3.1 Plot distance-based neighbors</p>
+<section id="plot-distance-based-neighbors" class="level4">
+<h4 class="anchored" data-anchor-id="plot-distance-based-neighbors">3.6.3.1 Plot distance-based neighbors</h4>
 <p>We can run the following codes</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(hunan<span class="sc">$</span>geometry, <span class="at">border=</span><span class="st">"lightgrey"</span>)</span>
@@ -960,7 +1061,11 @@ Non-symmetric neighbours list</code></pre>
 <p><img src="In-Class_Ex1_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>3.7 Weights based on Inversed Distance method</p>
+</section>
+</section>
+</section>
+<section id="weights-based-on-inversed-distance-method" class="level2">
+<h2 class="anchored" data-anchor-id="weights-based-on-inversed-distance-method">3.7 Weights based on Inversed Distance method</h2>
 <p>First, we compute the distances between areas (defined by Queen contiguity discussed in section 3.5.3.2) using <a href="https://r-spatial.github.io/spdep/reference/nbdists.html"><em>nbdists()</em></a> of <strong>spdep.</strong></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the inverse of distances between a county and its neighbors</span></span>
@@ -989,7 +1094,8 @@ Non-symmetric neighbours list</code></pre>
 [1] 0.015390649 0.015245977 0.021748129 0.011883901 0.009810297</code></pre>
 </div>
 </div>
-<p>3.7.1 Row-standard weight matrix (rswm)</p>
+<section id="row-standard-weight-matrix-rswm" class="level3">
+<h3 class="anchored" data-anchor-id="row-standard-weight-matrix-rswm">3.7.1 Row-standard weight matrix (rswm)</h3>
 <p>Next, we need to assign weights to each neighboring polygon using the <a href="https://www.rdocumentation.org/packages/spdep/versions/1.2-7/topics/nb2listw">nb2listw()</a> function. In our case, each neighboring polygon is assigned equal weight (style=“W”) for simplicity’s sake. This is accomplished by assigning the fraction 1/(#ofneighbors) to each neighboring county then summing the weighted income values. While this is the most intuitive way to summaries the neighbors’ values it has one drawback in that polygons along the edges of the study area will base their lagged values on fewer polygons thus potentially over- or under-estimating the true nature of the spatial autocorrelation in the data. Note that other more robust options are available, notably style=“B”.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co">#zero.policy=TRUE option allows for lists of non-neighbors. This should be used with caution since the user may not be aware of missing neighbors in the dataset</span></span>
@@ -1058,10 +1164,14 @@ B 88 7744 8.786867 0.3776535 3.8137</code></pre>
 0.008218 0.015088 0.018739 0.019614 0.022823 0.040338 </code></pre>
 </div>
 </div>
-<p>3.8 Application of Spatial Weight Matrix</p>
+</section>
+</section>
+<section id="application-of-spatial-weight-matrix" class="level2">
+<h2 class="anchored" data-anchor-id="application-of-spatial-weight-matrix">3.8 Application of Spatial Weight Matrix</h2>
 <p>The lag.listw() function (from spdep package) uses a “listw” sparse representation of a spatial weights matrix to compute the lag vector Vx. A listw object is typically created by nb2listw() function.</p>
-<p>3.8.1 Spatial lag with row-standardized weights</p>
-<p>We compute the average neighbor GDPPC value for each polygon. These values are often referred to as <strong>spatially lagged values.</strong></p>
+<section id="spatial-lag-with-row-standardized-weights" class="level3">
+<h3 class="anchored" data-anchor-id="spatial-lag-with-row-standardized-weights">3.8.1 Spatial lag with row-standardized weights</h3>
+<p>We compute the average neighbor GDPPC value for each polygon. These values are often referred to as spatially lagged values.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>GDPPC.lag <span class="ot">&lt;-</span> <span class="fu">lag.listw</span>(rswm_q, hunan<span class="sc">$</span>GDPPC)</span>
 <span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>GDPPC.lag</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1161,7 +1271,9 @@ Geodetic CRS:  WGS 84
 <p><img src="In-Class_Ex1_files/figure-html/unnamed-chunk-43-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>3.8.2 Spatial lag as a sum of neighboring values</p>
+</section>
+<section id="spatial-lag-as-a-sum-of-neighboring-values" class="level3">
+<h3 class="anchored" data-anchor-id="spatial-lag-as-a-sum-of-neighboring-values">3.8.2 Spatial lag as a sum of neighboring values</h3>
 <p>We can calculate spatial lag as a sum of neighboring values by assigning binary weights. This requires us to go back to our neighbors list, then apply a function that will assign binary weights, then we use glist = in the nb2listw function to explicitly assign these weights.</p>
 <p>We start by applying a function that will assign a value of 1 per each neighbor. This is done with lapply, which we have been using to manipulate the neighbors structure throughout the past notebooks. Basically it applies a function across each value in the neighbors structure.</p>
 <div class="cell">
@@ -1258,9 +1370,11 @@ B 88 7744 448 896 10224</code></pre>
 <p><img src="In-Class_Ex1_files/figure-html/unnamed-chunk-48-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>3.8.3 Spatial window average</p>
+</section>
+<section id="spatial-window-average" class="level3">
+<h3 class="anchored" data-anchor-id="spatial-window-average">3.8.3 Spatial window average</h3>
 <p>The spatial window average uses row-standardized weights and includes the diagonal element. To do this in R, we need to go back to the neighbors structure and add the diagonal element (the data points for the county itself) before assigning weights.</p>
-<p><img src="images/paste-A65D1629.png" class="img-fluid"></p>
+<p><img src="images/paste-CEC39989.png" class="img-fluid"></p>
 <p>We first assign wm_q to a new variable because we will directly alter its structure to add the diagonal elements.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a>wm_q1 <span class="ot">&lt;-</span> wm_q</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1344,7 +1458,9 @@ W 88 7744 88 37.86334 365.9147</code></pre>
 <p><img src="In-Class_Ex1_files/figure-html/unnamed-chunk-54-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>3.8.4 Spatial window sum</p>
+</section>
+<section id="spatial-window-sum" class="level3">
+<h3 class="anchored" data-anchor-id="spatial-window-sum">3.8.4 Spatial window sum</h3>
 <p>The spatial window sum is the counterpart of the window average, but without using row-standardized weights. To do this we assign binary weights to the neighbor structure that includes the diagonal element.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb92"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a>wm_q2 <span class="ot">&lt;-</span> wm_q</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1462,6 +1578,9 @@ B 88 7744 448 896 10224</code></pre>
 </div>
 
 
+</section>
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
