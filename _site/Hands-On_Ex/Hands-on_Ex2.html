@@ -467,8 +467,8 @@ Moran I statistic       Expectation          Variance
 </div>
 <table class="table">
 <colgroup>
-<col style="width: 24%">
-<col style="width: 75%">
+<col style="width: 20%">
+<col style="width: 79%">
 </colgroup>
 <tbody>
 <tr class="odd">
@@ -547,7 +547,7 @@ alternative hypothesis: greater</code></pre>
 <p><img src="Hands-on_Ex2_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>The curve shows the distribution of Moran I values we could expect had the GDPPC been randomly distributed across the counties. Note that our observed statistic, 0.300, falls to the right of the distribution suggesting that the GDPPC values are clustered (a positive Moran’s I value suggests clustering whereas a negative Moran’s I value suggests dispersion).</p>
+<p>The curve shows the distribution of Moran I values we could expect had the GDPPC been randomly distributed across the counties.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the S3 object to a dataframe as ggplot can only work with the latter</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>bperm.res <span class="ot">=</span> <span class="fu">as.data.frame</span>(bperm<span class="sc">$</span>res)</span>
@@ -557,11 +557,12 @@ alternative hypothesis: greater</code></pre>
 <span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">25</span>, <span class="at">color=</span><span class="st">'black'</span>,<span class="at">fill=</span><span class="st">"lightblue"</span>) <span class="sc">+</span></span>
 <span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y=</span><span class="st">'Frequency'</span>,<span class="at">x=</span><span class="st">"Simulated Mohan's I"</span>, <span class="at">title =</span> <span class="st">"Histogram of bperm$rep"</span>) <span class="sc">+</span></span>
 <span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title=</span><span class="fu">element_text</span>(<span class="at">hjust=</span><span class="fl">0.5</span>)) <span class="sc">+</span></span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>, <span class="at">color=</span><span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fl">0.000</span>, <span class="at">color=</span><span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="Hands-on_Ex2_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+<p>Note that our observed statistic, 0.300, falls to the right of the distribution suggesting that the GDPPC values are clustered (a positive Moran’s I value suggests clustering whereas a negative Moran’s I value suggests dispersion).</p>
 </section>
 </section>
 <section id="global-spatial-autocorrelation-gearys-c" class="level3">
