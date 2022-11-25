@@ -6,9 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="KB_Kwa">
+<meta name="author" content="KB">
 
-<title>ISSS624 - In-Class Exercise 1</title>
+<title>KB’s Geospatial Portal - In-Class Exercise 1</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -135,7 +135,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
     <a class="navbar-brand" href="../index.html">
-    <span class="navbar-title">ISSS624</span>
+    <span class="navbar-title">KB’s Geospatial Portal</span>
     </a>
   </div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
@@ -149,6 +149,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         <li>
     <a class="dropdown-item" href="../Hands-On_Ex/Hands-on_Ex1.html">
  <span class="dropdown-text">Hands-on Exercise 1</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../Hands-On_Ex/Hands-on_Ex2.html">
+ <span class="dropdown-text">Hands-on Exercise 2</span></a>
   </li>  
     </ul>
   </li>
@@ -238,7 +242,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <div>
     <div class="quarto-title-meta-heading">Author</div>
     <div class="quarto-title-meta-contents">
-             <p>KB_Kwa </p>
+             <p>KB </p>
           </div>
   </div>
     
@@ -363,6 +367,12 @@ Geodetic CRS:  WGS 84</code></pre>
 <p>We will use <a href="https://r-spatial.github.io/spdep/reference/poly2nb.html"><em>poly2nb()</em></a> of <strong>spdep</strong> package to compute contiguity weight matrices. The function builds a neighbours list based on regions with contiguous boundaries, that is sharing one or more boundary point. The function uses the Queen criteria by default (see section 3.5.3 to use the Rook criteria).</p>
 <section id="compute-contiguity-based-neighbors-using-queen-method" class="level3">
 <h3 class="anchored" data-anchor-id="compute-contiguity-based-neighbors-using-queen-method">3.5.1 Compute contiguity based neighbors using Queen method</h3>
+<p>THe Queen method identifies neighbors that surround the area of study. In the diagram below, the blue cell i, is surrounded by 8 neighbors</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/paste-DA98E6CE.png" class="img-fluid figure-img" width="189"></p>
+</figure>
+</div>
 <p>The code chunk below is used to compute Queen contiguity weight matrix.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>wm_q <span class="ot">&lt;-</span> <span class="fu">poly2nb</span>(hunan, <span class="at">queen=</span><span class="cn">TRUE</span>)</span>
@@ -541,6 +551,12 @@ Link number distribution:
 </section>
 <section id="compute-contiguity-based-neighbors-using-rook-method" class="level3">
 <h3 class="anchored" data-anchor-id="compute-contiguity-based-neighbors-using-rook-method">3.5.2 Compute contiguity based neighbors using Rook method</h3>
+<p>The Rook method identifies adjacent neighbors. In the diagram below, the blue cell i has 4 neighbors, much like how a Rook moves about on a chess board.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/paste-084D321E.png" class="img-fluid figure-img" width="190"></p>
+</figure>
+</div>
 <p>The code chunk below is used to compute Rook contiguity weight matrix.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>wm_r <span class="ot">&lt;-</span> <span class="fu">poly2nb</span>(hunan, <span class="at">queen=</span><span class="cn">FALSE</span>)</span>
@@ -927,7 +943,7 @@ Average number of links: 3.681818 </code></pre>
 <span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(hunan<span class="sc">$</span>geometry, <span class="at">border=</span><span class="st">"lightgrey"</span>)</span>
 <span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(wm_d62, coords, <span class="at">add=</span><span class="cn">TRUE</span>, <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">cex =</span> <span class="fl">0.6</span>)</span>
-<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span>(<span class="at">main =</span> <span class="st">"Disance-linked neighbours </span><span class="sc">\n</span><span class="st"> (within 62km)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span>(<span class="at">main =</span> <span class="st">"Distance-linked neighbours </span><span class="sc">\n</span><span class="st"> (within 62km)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="In-Class_Ex1_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -1116,6 +1132,11 @@ Weights constants summary:
 W 88 7744 88 37.86334 365.9147</code></pre>
 </div>
 </div>
+<p>The input of <em>nb2listw()</em> must be an object of class <strong>nb</strong>. The syntax of the function has two major arguments, namely style and zero.poly.</p>
+<ul>
+<li><p><em>style</em> can take values “W”, “B”, “C”, “U”, “minmax” and “S”. B is the basic binary coding, W is row standardised (sums over all links to n), C is globally standardised (sums over all links to n), U is equal to C divided by the number of neighbours (sums over all links to unity), while S is the variance-stabilizing coding scheme proposed by Tiefelsdorf et al.&nbsp;1999, p.&nbsp;167-168 (sums over all links to n).</p></li>
+<li><p>If <em>zero policy</em> is set to TRUE, weights vectors of zero length are inserted for regions without neighbour in the neighbours list. These will in turn generate lag values of zero, equivalent to the sum of products of the zero row t(rep(0, length=length(neighbours))) %*% x, for arbitrary numerical vector x of length length(neighbours). The spatially lagged value of x for the zero-neighbour region will then be zero, which may (or may not) be a sensible choice.</p></li>
+</ul>
 <p>Recall that in Section 3.5.1.1 , Polygon 1 has 5 neighbors</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>wm_q[[<span class="dv">1</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
