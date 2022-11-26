@@ -4,6 +4,10 @@ author: "KB"
 editor: visual
 ---
 
+Updated on 26-Nov-22
+
+(First published on 25-Nov-22)
+
 # 4.Global and Local Measures of Spatial Autocorrelation
 
 *Everything is related to everything else. But near things are more related than distant things*
@@ -26,7 +30,7 @@ Use appropriate functions from R spdep and tmap packages to:
 
 Our task in this study is to apply appropriate spatial statistical methods to discover if development in Hunan province of China is evenly distributed geographically.
 
-![](images/paste-C80092DB.png)
+![](images/paste-CB618048.png)
 
 We will use GDP per capita (GDPPC) as the measure of development.
 
@@ -49,6 +53,7 @@ pacman::p_load(sf,spdep,tmap,tidyverse, ggplot2)
 ### 4.3.1 Import the ESRI shapefile
 
 ```{r}
+
 hunan = st_read(dsn = "Hands-On_Ex2/data/geospatial",layer = "Hunan")
 ```
 
@@ -60,7 +65,7 @@ hunan2012 = read_csv("Hands-On_Ex2/data/aspatial/Hunan_2012.csv",show_col_types 
 
 ### 4.3.3 Perform relational join
 
-To append the development indicators information into the hunan SpatialPolygonsDataFrame using a *left_join()*
+To append the development indicators information into the hunan SpatialPolygonsDataFrame using a *left_join().*
 
 ```{r}
 hunan = left_join(hunan,hunan2012)
@@ -118,11 +123,7 @@ wm_q <- poly2nb(hunan, queen=TRUE)
 summary(wm_q)
 ```
 
-The summary report above shows that there are 88 area units in Hunan.
-
-There are two area units - regions 30 and 65 - with only one neighbor.
-
-The most connected area unit - region 85 - has 11 neighbors.
+The summary report above shows that there are 88 area units in Hunan. There are two area units - regions 30 and 65 - with only one neighbor. The most connected area unit - region 85 - has 11 neighbors.
 
 ### 4.4.2 Row-standardised weights matrix
 
@@ -137,6 +138,12 @@ rswm_q <- nb2listw(wm_q,
 rswm_q
 ```
 
+The input of *nb2listw()* must be an object of class **nb**. The syntax of the function has two major arguments, namely style and zero.policy.
+
+-   *style* can take values "W", "B", "C", "U", "minmax" and "S". B is the basic binary coding, W is row standardised (sums over all links to n), C is globally standardised (sums over all links to n), U is equal to C divided by the number of neighbours (sums over all links to unity), while S is the variance-stabilizing coding scheme proposed by Tiefelsdorf et al. 1999, p. 167-168 (sums over all links to n).
+
+-   If *zero policy* is set to TRUE, weights vectors of zero length are inserted for regions without neighbour in the neighbours list. These will in turn generate lag values of zero, equivalent to the sum of products of the zero row t(rep(0, length=length(neighbours))) %\*% x, for arbitrary numerical vector x of length length(neighbours). The spatially lagged value of x for the zero-neighbour region will then be zero, which may (or may not) be a sensible choice.
+
 ### 4.4.3 Global Spatial Autocorrelation: Moran's I
 
 The Global Moran's Iis a global statistic that provides us with a [single]{.underline} value for our entire dataset to describe if a variable of interest corresponds to the first law of geography - everything is related, but things that are closer together are more related than things further away. The Global Moran's Ioperates by comparing how similar every object (such as its GDPPC) is to its neighbors, and then averaging out all of these comparisons to give us an overall impression about the spatial pattern of the variable.
@@ -148,7 +155,7 @@ In this section, we learn how to compute Moran's I statistics testing by using [
 The [Spatial Autocorrelation (Global Moran's I)](https://pro.arcgis.com/en/pro-app/latest/tool-reference/spatial-statistics/h-how-spatial-autocorrelation-moran-s-i-spatial-st.htm) tool measures spatial autocorrelation based on both feature locations and feature values simultaneously. Given a set of features and an associated attribute, it evaluates whether the pattern expressed is clustered, dispersed, or random. The tool calculates the Moran's I Index value and both a a z-score and p-value to evaluate the significance of the Index. [P-values](https://pro.arcgis.com/en/pro-app/3.0/tool-reference/spatial-statistics/what-is-a-z-score-what-is-a-p-value.htm) are numerical approximations of the area under the curve for a known distribution, limited by the test statistic.
 
 ```{r}
-# set zero.policy = TRUE if we want to assign zero to the lagged value of zones without neighbors
+# set zero.policy = TRUE if we want to assign zero to the lag value of zones without neighbors
 #
 moran.test(hunan$GDPPC, 
            listw=rswm_q, 
@@ -163,7 +170,7 @@ When the [p-value](https://pro.arcgis.com/en/pro-app/3.0/tool-reference/spatial-
 ![](images/paste-F2DB8E76.png){fig-align="center" width="628"}
 
 |                                                                          |                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-|---------------|---------------------------------------------------------|
+|--------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | The p-value is not statistically significant                             | We cannot reject the null hypothesis. It is quite possible that the spatial distribution of feature values is the result of random spatial processes. The observed spatial pattern of feature values could very well be one of many possible versions of complete spatial randomness.                                                                                                                                                   |
 | The p-value *is* statistically significant, and the z-score is positive. | We may reject the null hypothesis. The spatial distribution of high values and/or low values in the dataset is more spatially clustered than would be expected if underlying spatial processes were random.                                                                                                                                                                                                                             |
 | The p-value *is* statistically significant, and the z-score is negative. | We may reject the null hypothesis. The spatial distribution of high values and low values in the dataset is more spatially dispersed than would be expected if underlying spatial processes were random. A dispersed spatial pattern often reflects some type of competitive process---a feature with a high value repels other features with high values; similarly, a feature with a low value repels other features with low values. |
@@ -211,7 +218,7 @@ hist(bperm$res,
      freq=TRUE, 
      breaks=20, 
      xlab="Simulated Moran's I")
-abline(v=-0.0, 
+abline(v=0.30075, 
        col="red")
 ```
 
@@ -227,11 +234,11 @@ ggplot(data = bperm.res, aes(x=bperm$res)) +
   geom_histogram(bins = 25, color='black',fill="lightblue") +
   labs(y='Frequency',x="Simulated Mohan's I", title = "Histogram of bperm$rep") +
   theme(plot.title=element_text(hjust=0.5)) +
-  geom_vline(xintercept = 0.000, color="red")
+  geom_vline(xintercept = 0.30075, color="red")
   
 ```
 
-Note that our observed statistic, 0.300, falls to the right of the distribution suggesting that the GDPPC values are clustered (a positive Moran's I value suggests clustering whereas a negative Moran's I value suggests dispersion).
+Note that our observed statistic, 0.300, falls to the right of the distribution suggesting that the GDPPC values are clustered and the result is significant.
 
 ### 4.4.4 Global Spatial Autocorrelation: Geary's C
 
@@ -249,11 +256,13 @@ Geary's C (Z value) is:
 
 -   Small c value (\<1) : Clustered, observations tend to be similar;
 
+-   0 \<= c value \<= 3
+
 ```{r}
 geary.test(hunan$GDPPC, listw=rswm_q)
 ```
 
-Since p-value \< 0.05, the level of significance, we reject the null hypothesis and conclude that the observed spatial pattern of GDPPC is **not** equally likely as any other spatial pattern (i.e. **not** spatially random)
+Since p-value \< 0.05, the level of significance, we reject the null hypothesis and conclude that the observed spatial pattern of GDPPC is **not** equally likely as any other spatial pattern (i.e. **not** spatially random). Also, given that the Geary's C statistic is \< 0.05, there's some clustering on the map.
 
 #### 4.4.4.2 Compute Monte Carlo Geary's C
 
@@ -289,8 +298,10 @@ Next, we plot a histogram to reveal the distribution of the simulated values by 
 
 ```{r}
 hist(bperm_c$res, freq=TRUE, breaks=20, xlab="Simulated Geary c")
-abline(v=1, col="red")
+abline(v=0.6907223, col="red")
 ```
+
+The simulated results for Moran's I and Geary's C are the same. That is, the test statistics are significant and that there's some degree of clustering on the map.
 
 ## 4.5 Spatial Correlogram
 
@@ -335,6 +346,8 @@ We print out the analysis report by using the code chunk below
 ```{r}
 print(GC_corr)
 ```
+
+The results above show that Moran's I and Geary's C values are inversely related.
 
 ## 4.6 Cluster and Outlier Analysis
 
@@ -520,8 +533,8 @@ The following four command lines define the high-high, low-low, low-high and hig
 
 ```{r}
 quadrant[DV >0 & C_mI>0] <- 4      
-quadrant[DV <0 & C_mI<0] <- 1      
-quadrant[DV <0 & C_mI>0] <- 2
+quadrant[DV <0 & C_mI<0] <- 2      
+quadrant[DV <0 & C_mI>0] <- 1
 quadrant[DV >0 & C_mI<0] <- 3
 ```
 
