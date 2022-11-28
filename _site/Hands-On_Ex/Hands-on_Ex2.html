@@ -273,7 +273,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
-<p>Updated on 26-Nov-22</p>
+<p>Updated on 28-Nov-22</p>
 <p>(First published on 25-Nov-22)</p>
 <section id="global-and-local-measures-of-spatial-autocorrelation" class="level1">
 <h1>4.Global and Local Measures of Spatial Autocorrelation</h1>
@@ -436,23 +436,22 @@ W 88 7744 88 37.86334 365.9147</code></pre>
 <p>The input of <em>nb2listw()</em> must be an object of class <strong>nb</strong>. The syntax of the function has two major arguments, namely style and zero.policy.</p>
 <ul>
 <li><p><em>style</em> can take values “W”, “B”, “C”, “U”, “minmax” and “S”. B is the basic binary coding, W is row standardised (sums over all links to n), C is globally standardised (sums over all links to n), U is equal to C divided by the number of neighbours (sums over all links to unity), while S is the variance-stabilizing coding scheme proposed by Tiefelsdorf et al.&nbsp;1999, p.&nbsp;167-168 (sums over all links to n).</p></li>
-<li><p>If <em>zero policy</em> is set to TRUE, weights vectors of zero length are inserted for regions without neighbour in the neighbours list. These will in turn generate lag values of zero, equivalent to the sum of products of the zero row t(rep(0, length=length(neighbours))) %*% x, for arbitrary numerical vector x of length length(neighbours). The spatially lagged value of x for the zero-neighbour region will then be zero, which may (or may not) be a sensible choice.</p></li>
+<li><p>If <em>zero policy</em> is set to TRUE, weights vectors of zero length are inserted for regions without neighbor in the neighbors list. These will in turn generate lag values of zero, equivalent to the sum of products of the zero row t(rep(0, length=length(neighbours))) %*% x, for arbitrary numerical vector x of length length(neighbours). The spatially lagged value of x for the zero-neighbor region will then be zero, which may (or may not) be a sensible choice.</p></li>
 </ul>
 </section>
 <section id="global-spatial-autocorrelation-morans-i" class="level3">
 <h3 class="anchored" data-anchor-id="global-spatial-autocorrelation-morans-i">4.4.3 Global Spatial Autocorrelation: Moran’s I</h3>
-<p>The Global Moran’s Iis a global statistic that provides us with a <u>single</u> value for our entire dataset to describe if a variable of interest corresponds to the first law of geography - everything is related, but things that are closer together are more related than things further away. The Global Moran’s Ioperates by comparing how similar every object (such as its GDPPC) is to its neighbors, and then averaging out all of these comparisons to give us an overall impression about the spatial pattern of the variable.</p>
+<p>The Global Moran’s I is a global statistic that provides us with a <u>single</u> value for our entire data set to describe if a variable of interest corresponds to the first law of geography - everything is related, but things that are closer together are more related than things further away. The Global Moran’s I operates by comparing how similar every object (such as its GDPPC) is to its neighbors, and then averaging out all of these comparisons to give us an overall impression about the spatial pattern of the variable.</p>
 <p>In this section, we learn how to compute Moran’s I statistics testing by using <a href="https://r-spatial.github.io/spdep/reference/moran.test.html"><em>moran.test()</em></a> of <strong>spdep</strong>.</p>
 <section id="marons-i-test" class="level4">
 <h4 class="anchored" data-anchor-id="marons-i-test">4.4.3.1 Maron’s I test</h4>
 <p>The <a href="https://pro.arcgis.com/en/pro-app/latest/tool-reference/spatial-statistics/h-how-spatial-autocorrelation-moran-s-i-spatial-st.htm">Spatial Autocorrelation (Global Moran’s I)</a> tool measures spatial autocorrelation based on both feature locations and feature values simultaneously. Given a set of features and an associated attribute, it evaluates whether the pattern expressed is clustered, dispersed, or random. The tool calculates the Moran’s I Index value and both a a z-score and p-value to evaluate the significance of the Index. <a href="https://pro.arcgis.com/en/pro-app/3.0/tool-reference/spatial-statistics/what-is-a-z-score-what-is-a-p-value.htm">P-values</a> are numerical approximations of the area under the curve for a known distribution, limited by the test statistic.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set zero.policy = TRUE if we want to assign zero to the lag value of zones without neighbors</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">moran.test</span>(hunan<span class="sc">$</span>GDPPC, </span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">listw=</span>rswm_q, </span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">zero.policy =</span> <span class="cn">TRUE</span>, </span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">na.action=</span>na.omit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">moran.test</span>(hunan<span class="sc">$</span>GDPPC, </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">listw=</span>rswm_q, </span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">zero.policy =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">na.action=</span>na.omit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Moran I test under randomisation
@@ -476,8 +475,8 @@ Moran I statistic       Expectation          Variance
 </div>
 <table class="table">
 <colgroup>
-<col style="width: 25%">
-<col style="width: 75%">
+<col style="width: 20%">
+<col style="width: 79%">
 </colgroup>
 <tbody>
 <tr class="odd">
@@ -494,11 +493,11 @@ Moran I statistic       Expectation          Variance
 </tr>
 </tbody>
 </table>
-<p>The Moran’s I statistic is 0.3007, a positive value implying that there’s some degree of clustering. The p-value is &lt;0.01 implying that we can reject the null hypothesis.</p>
+<p>The Moran’s I statistic is 0.3007, a positive value implies that there’s some degree of clustering. The p-value is &lt;0.01 implying that we can reject the null hypothesis.</p>
 </section>
 <section id="compute-monte-carlo-morans-i" class="level4">
 <h4 class="anchored" data-anchor-id="compute-monte-carlo-morans-i">4.4.3.2 Compute Monte Carlo Moran’s I</h4>
-<p>The analytical approach to the Moran’s I analysis benefits from being fast. But it may be sensitive to irregularly distributed polygons. <a href="https://mgimond.github.io/simple_moransI_example/#step_4:_computing_the_moran%E2%80%99s_i_statistic">A safer approach</a> to hypothesis testing is to run an MC simulation using the <code>moran.mc()</code> function. The <code>moran.mc</code> function takes an extra argument <code>n</code>, the number of simulations.</p>
+<p>The analytical approach to the Moran’s I analysis benefits from being fast. But it may be sensitive to irregularly distributed polygons. <a href="https://mgimond.github.io/simple_moransI_example/#step_4:_computing_the_moran%E2%80%99s_i_statistic">A safer approach</a> to hypothesis testing is to run an Monte Carlo (MC) C simulation using the <code>moran.mc()</code> function. The <code>moran.mc</code> function takes an extra argument <code>n</code>, the number of simulations.</p>
 <p>The code chunk below performs permutation test for Moran’s I statistic. A total of 1000 simulation will be performed.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
@@ -652,13 +651,13 @@ alternative hypothesis: greater</code></pre>
 </div>
 <p>Next, we plot a histogram to reveal the distribution of the simulated values by using the code chunk below.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(bperm_c<span class="sc">$</span>res, <span class="at">freq=</span><span class="cn">TRUE</span>, <span class="at">breaks=</span><span class="dv">20</span>, <span class="at">xlab=</span><span class="st">"Simulated Geary c"</span>)</span>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(bperm_c<span class="sc">$</span>res, <span class="at">freq=</span><span class="cn">TRUE</span>, <span class="at">breaks=</span><span class="dv">20</span>, <span class="at">xlab=</span><span class="st">"Simulated Geary's C"</span>)</span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="fl">0.6907223</span>, <span class="at">col=</span><span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="Hands-on_Ex2_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>The simulated results for Moran’s I and Geary’s C are the same. That is, the test statistics are significant and that there’s some degree of clustering on the map.</p>
+<p>The simulated results for Moran’s I and Geary’s C statistics are the same. That is, the test statistics are significant and that there’s some degree of clustering on the map.</p>
 </section>
 </section>
 </section>
@@ -667,7 +666,7 @@ alternative hypothesis: greater</code></pre>
 <p>Spatial correlograms are great to examine patterns of spatial autocorrelation in our data or model residuals. They show how correlated pairs of spatial observations are when we increase the distance (lag) between them - they are plots of some index of autocorrelation (Moran’s I or Geary’s c) against distance.</p>
 <section id="compute-morans-i-correlogram" class="level3">
 <h3 class="anchored" data-anchor-id="compute-morans-i-correlogram">4.5.1 Compute Moran’s I Correlogram</h3>
-<p>In the code chunk below, <a href="https://r-spatial.github.io/spdep/reference/sp.correlogram.html"><em>sp.correlogram()</em></a> of <strong>spdep</strong> package is used to compute a 6-lag spatial correlogram of GDPPC.</p>
+<p>In the code chunk below, <a href="https://r-spatial.github.io/spdep/reference/sp.correlogram.html"><em>sp.correlogram()</em></a> of <strong>spdep</strong> package is used to compute a 6-lag spatial correlogram of GDPPC. This will equivalent to examining the 1st to 6th order neighbors of each county.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Method = "I" for Moran's I</span></span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>MI_corr <span class="ot">&lt;-</span> <span class="fu">sp.correlogram</span>(wm_q, </span>
@@ -680,6 +679,7 @@ alternative hypothesis: greater</code></pre>
 <p><img src="Hands-on_Ex2_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+<p>The Correlogram above shows the diffusing effect of the clustering with each increase in spatial lag of neighbors. That is, back to Tobler’s first law, near neighbors will contribute more to the clustering than distant neighbors. If the Moran’s I statistic of lag 2 to lag 6 decreases at a slower rate, this would also mean that the clustering has a wider spread. In practice, the correlogram can used by urban planners to examine whether the development in a region should be spread to its neighboring regions and study the possible implications to do so.</p>
 <p>To understand if all autocorrelation values are statistically significant, we examine the full analysis results with the following code chunk:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(MI_corr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -961,13 +961,26 @@ Zixing        -7.6849e-01 -8.8210e-02  9.4057e-01 -7.0144e-01         0.4830</co
 <p><img src="Hands-on_Ex2_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>Notice that the plot is split in 4 quadrants. The x-axis represents values the values at location <em>i</em>, while the y-axis represents values in the neighborhood of location <em>i</em>. Therefore, values in the top-right of the scatterplot represent locations in which the attribute at <em>i</em> and its neighbors are well above the mean, indicating positive spatial autocorrelation. In the above, the top right corner belongs to areas that have high GDPPC and are surrounded by other areas that also have above average level of GDPPC.</p>
-<p>Points in the lower-left corner of the plot indicate locations in which the attribute at <em>i</em> and its neighbors are below the mean; this also represents locations of positive spatial autocorrelation because nearby locations are similar.</p>
+<p>Notice that the plot is split in 4 quadrants. The x-axis represents the values at location <em>i</em>, while the y-axis represents values in the neighborhood of location <em>i</em>. Therefore, values in the top-right of the scatterplot represent locations in which the attribute at <em>i</em> and its neighbors are well above the mean, indicating positive spatial autocorrelation. In the above, the top right corner belongs to areas that have high GDPPC and are surrounded by other areas that also have above average level of GDPPC (<em>high-high</em> spatial autocorrelation).</p>
+<p>Points in the lower-left corner of the plot indicate locations in which the attribute at <em>i</em> and its neighbors are below the mean; this also represents locations of positive spatial autocorrelation because nearby locations are similar (<em>low-low</em> spatial autocorrelation) . In contrast, the lower-right and upper-left quadrant correspond to negative spatial autocorrelation (dissimilar values at neighboring locations and hence treated as outliers). We refer to them as respectively <em>high-low</em> and <em>low-high</em> spatial autocorrelation.</p>
 <p>The solid diagonal line is a best-fit line through the points, indicating the presence of positive spatial autocorrelation throughout the entire dataset. Note that points represent with a diamond shape are values that are deemed to be significant at a specific level of confidence; the numbers next to these points simply represent their ID number.&nbsp;</p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+It is important to keep in mind that the classification as such does not imply significance.
+</div>
+</div>
+<div class="callout-body-container callout-body">
+
+</div>
+</div>
 </section>
 <section id="plot-moran-scatterplot-with-standardised-variable" class="level3">
 <h3 class="anchored" data-anchor-id="plot-moran-scatterplot-with-standardised-variable">4.7.2 Plot Moran scatterplot with standardised variable</h3>
-<p>First we se <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/scale"><em>scale()</em></a> to centers and scales the variable. Here centering is done by subtracting the mean (omitting NAs) the corresponding columns, and scaling is done by dividing the (centered) variable by their standard deviations.</p>
+<p>First we use <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/scale"><em>scale()</em></a> to centers and scales the variable. Here centering is done by subtracting the mean (omitting NAs) the corresponding columns, and scaling is done by dividing the (centered) variable by their standard deviations.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>hunan<span class="sc">$</span>Z.GDPPC <span class="ot">&lt;-</span> <span class="fu">scale</span>(hunan<span class="sc">$</span>GDPPC) <span class="sc">%&gt;%</span> as.vector </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -991,22 +1004,34 @@ Zixing        -7.6849e-01 -8.8210e-02  9.4057e-01 -7.0144e-01         0.4830</co
 </div>
 <p>Next, we centers the variable of interest around its mean.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>DV <span class="ot">&lt;-</span> hunan<span class="sc">$</span>GDPPC <span class="sc">-</span> <span class="fu">mean</span>(hunan<span class="sc">$</span>GDPPC)     </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>hunan<span class="sc">$</span>lag_GDPPC <span class="ot">&lt;-</span> <span class="fu">lag.listw</span>(rswm_q, hunan<span class="sc">$</span>GDPPC)</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>DV <span class="ot">&lt;-</span> hunan<span class="sc">$</span>lag_GDPPC <span class="sc">-</span> <span class="fu">mean</span>(hunan<span class="sc">$</span>lag_GDPPC)          </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This is follow by centering the local Moran’s around the mean.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>C_mI <span class="ot">&lt;-</span> localMI[,<span class="dv">1</span>] <span class="sc">-</span> <span class="fu">mean</span>(localMI[,<span class="dv">1</span>])    </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>LM_I <span class="ot">&lt;-</span> localMI[,<span class="dv">1</span>] <span class="sc">-</span> <span class="fu">mean</span>(localMI[,<span class="dv">1</span>])    </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Next, we will set a statistical significance level for the local Moran.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>signif <span class="ot">&lt;-</span> <span class="fl">0.05</span>       </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The following four command lines define the high-high, low-low, low-high and high-low categories.</p>
+<p>The following four command lines define the low-low (1), low-high (2), high-low (3) and high-high (4) categories.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>quadrant[DV <span class="sc">&gt;</span><span class="dv">0</span> <span class="sc">&amp;</span> C_mI<span class="sc">&gt;</span><span class="dv">0</span>] <span class="ot">&lt;-</span> <span class="dv">4</span>      </span>
-<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>quadrant[DV <span class="sc">&lt;</span><span class="dv">0</span> <span class="sc">&amp;</span> C_mI<span class="sc">&lt;</span><span class="dv">0</span>] <span class="ot">&lt;-</span> <span class="dv">2</span>      </span>
-<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>quadrant[DV <span class="sc">&lt;</span><span class="dv">0</span> <span class="sc">&amp;</span> C_mI<span class="sc">&gt;</span><span class="dv">0</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>quadrant[DV <span class="sc">&gt;</span><span class="dv">0</span> <span class="sc">&amp;</span> C_mI<span class="sc">&lt;</span><span class="dv">0</span>] <span class="ot">&lt;-</span> <span class="dv">3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="co"># LM_I &gt; 0 =&gt; Positive Autocorrelation, DV &lt; 0 =&gt; Low</span></span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Low-Low =&gt; Low and neighbors are Low</span></span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>quadrant[DV <span class="sc">&lt;</span><span class="dv">0</span> <span class="sc">&amp;</span> LM_I<span class="sc">&gt;</span><span class="dv">0</span>] <span class="ot">&lt;-</span> <span class="dv">1</span> </span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a><span class="co"># LM_I&lt;0 =&gt; Negative Autocorrelation, DV &gt; 0 =&gt; High neigbors</span></span>
+<span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Low-High =&gt; Low outlier among High neighbors</span></span>
+<span id="cb58-7"><a href="#cb58-7" aria-hidden="true" tabindex="-1"></a>quadrant[DV <span class="sc">&gt;</span><span class="dv">0</span> <span class="sc">&amp;</span> LM_I<span class="sc">&lt;</span><span class="dv">0</span>] <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb58-8"><a href="#cb58-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-9"><a href="#cb58-9" aria-hidden="true" tabindex="-1"></a><span class="co"># LM_I &lt; 0 =&gt; Negative Autocorrelation, DV &lt; 0 =&gt; Low neighors</span></span>
+<span id="cb58-10"><a href="#cb58-10" aria-hidden="true" tabindex="-1"></a><span class="co"># High-Low =&gt; High outlier among Low neighbors</span></span>
+<span id="cb58-11"><a href="#cb58-11" aria-hidden="true" tabindex="-1"></a>quadrant[DV <span class="sc">&lt;</span><span class="dv">0</span> <span class="sc">&amp;</span> LM_I<span class="sc">&lt;</span><span class="dv">0</span>] <span class="ot">&lt;-</span> <span class="dv">3</span>  </span>
+<span id="cb58-12"><a href="#cb58-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-13"><a href="#cb58-13" aria-hidden="true" tabindex="-1"></a><span class="co"># LM_I &gt; 0 =&gt; Positive Autocorrelation, DV &gt; 0 =&gt; High</span></span>
+<span id="cb58-14"><a href="#cb58-14" aria-hidden="true" tabindex="-1"></a><span class="co"># High - High =&gt; High and neighbors are High</span></span>
+<span id="cb58-15"><a href="#cb58-15" aria-hidden="true" tabindex="-1"></a>quadrant[DV <span class="sc">&gt;</span><span class="dv">0</span> <span class="sc">&amp;</span> LM_I<span class="sc">&gt;</span><span class="dv">0</span>] <span class="ot">&lt;-</span> <span class="dv">4</span>      </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Lastly, places non-significant Moran in the category 0.</p>
 <div class="cell">

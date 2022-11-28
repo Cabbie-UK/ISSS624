@@ -4,7 +4,7 @@ author: "KB"
 editor: visual
 ---
 
-Updated on 26-Nov-22
+Updated on 28-Nov-22
 
 (First published on 25-Nov-22)
 
@@ -142,11 +142,11 @@ The input of *nb2listw()* must be an object of class **nb**. The syntax of the f
 
 -   *style* can take values "W", "B", "C", "U", "minmax" and "S". B is the basic binary coding, W is row standardised (sums over all links to n), C is globally standardised (sums over all links to n), U is equal to C divided by the number of neighbours (sums over all links to unity), while S is the variance-stabilizing coding scheme proposed by Tiefelsdorf et al. 1999, p. 167-168 (sums over all links to n).
 
--   If *zero policy* is set to TRUE, weights vectors of zero length are inserted for regions without neighbour in the neighbours list. These will in turn generate lag values of zero, equivalent to the sum of products of the zero row t(rep(0, length=length(neighbours))) %\*% x, for arbitrary numerical vector x of length length(neighbours). The spatially lagged value of x for the zero-neighbour region will then be zero, which may (or may not) be a sensible choice.
+-   If *zero policy* is set to TRUE, weights vectors of zero length are inserted for regions without neighbor in the neighbors list. These will in turn generate lag values of zero, equivalent to the sum of products of the zero row t(rep(0, length=length(neighbours))) %\*% x, for arbitrary numerical vector x of length length(neighbours). The spatially lagged value of x for the zero-neighbor region will then be zero, which may (or may not) be a sensible choice.
 
 ### 4.4.3 Global Spatial Autocorrelation: Moran's I
 
-The Global Moran's Iis a global statistic that provides us with a [single]{.underline} value for our entire dataset to describe if a variable of interest corresponds to the first law of geography - everything is related, but things that are closer together are more related than things further away. The Global Moran's Ioperates by comparing how similar every object (such as its GDPPC) is to its neighbors, and then averaging out all of these comparisons to give us an overall impression about the spatial pattern of the variable.
+The Global Moran's I is a global statistic that provides us with a [single]{.underline} value for our entire data set to describe if a variable of interest corresponds to the first law of geography - everything is related, but things that are closer together are more related than things further away. The Global Moran's I operates by comparing how similar every object (such as its GDPPC) is to its neighbors, and then averaging out all of these comparisons to give us an overall impression about the spatial pattern of the variable.
 
 In this section, we learn how to compute Moran's I statistics testing by using [*moran.test()*](https://r-spatial.github.io/spdep/reference/moran.test.html) of **spdep**.
 
@@ -155,7 +155,7 @@ In this section, we learn how to compute Moran's I statistics testing by using [
 The [Spatial Autocorrelation (Global Moran's I)](https://pro.arcgis.com/en/pro-app/latest/tool-reference/spatial-statistics/h-how-spatial-autocorrelation-moran-s-i-spatial-st.htm) tool measures spatial autocorrelation based on both feature locations and feature values simultaneously. Given a set of features and an associated attribute, it evaluates whether the pattern expressed is clustered, dispersed, or random. The tool calculates the Moran's I Index value and both a a z-score and p-value to evaluate the significance of the Index. [P-values](https://pro.arcgis.com/en/pro-app/3.0/tool-reference/spatial-statistics/what-is-a-z-score-what-is-a-p-value.htm) are numerical approximations of the area under the curve for a known distribution, limited by the test statistic.
 
 ```{r}
-# set zero.policy = TRUE if we want to assign zero to the lag value of zones without neighbors
+
 #
 moran.test(hunan$GDPPC, 
            listw=rswm_q, 
@@ -170,16 +170,16 @@ When the [p-value](https://pro.arcgis.com/en/pro-app/3.0/tool-reference/spatial-
 ![](images/paste-F2DB8E76.png){fig-align="center" width="628"}
 
 |                                                                          |                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-|------------------|------------------------------------------------------|
+|---------------|---------------------------------------------------------|
 | The p-value is not statistically significant                             | We cannot reject the null hypothesis. It is quite possible that the spatial distribution of feature values is the result of random spatial processes. The observed spatial pattern of feature values could very well be one of many possible versions of complete spatial randomness.                                                                                                                                                   |
 | The p-value *is* statistically significant, and the z-score is positive. | We may reject the null hypothesis. The spatial distribution of high values and/or low values in the dataset is more spatially clustered than would be expected if underlying spatial processes were random.                                                                                                                                                                                                                             |
 | The p-value *is* statistically significant, and the z-score is negative. | We may reject the null hypothesis. The spatial distribution of high values and low values in the dataset is more spatially dispersed than would be expected if underlying spatial processes were random. A dispersed spatial pattern often reflects some type of competitive process---a feature with a high value repels other features with high values; similarly, a feature with a low value repels other features with low values. |
 
-The Moran's I statistic is 0.3007, a positive value implying that there's some degree of clustering. The p-value is \<0.01 implying that we can reject the null hypothesis.
+The Moran's I statistic is 0.3007, a positive value implies that there's some degree of clustering. The p-value is \<0.01 implying that we can reject the null hypothesis.
 
 #### 4.4.3.2 Compute Monte Carlo Moran's I
 
-The analytical approach to the Moran's I analysis benefits from being fast. But it may be sensitive to irregularly distributed polygons. [A safer approach](https://mgimond.github.io/simple_moransI_example/#step_4:_computing_the_moran%E2%80%99s_i_statistic) to hypothesis testing is to run an MC simulation using the `moran.mc()` function. The `moran.mc` function takes an extra argument `n`, the number of simulations.
+The analytical approach to the Moran's I analysis benefits from being fast. But it may be sensitive to irregularly distributed polygons. [A safer approach](https://mgimond.github.io/simple_moransI_example/#step_4:_computing_the_moran%E2%80%99s_i_statistic) to hypothesis testing is to run an Monte Carlo (MC) C simulation using the `moran.mc()` function. The `moran.mc` function takes an extra argument `n`, the number of simulations.
 
 The code chunk below performs permutation test for Moran's I statistic. A total of 1000 simulation will be performed.
 
@@ -297,11 +297,11 @@ summary(bperm_c$res[1:999])
 Next, we plot a histogram to reveal the distribution of the simulated values by using the code chunk below.
 
 ```{r}
-hist(bperm_c$res, freq=TRUE, breaks=20, xlab="Simulated Geary c")
+hist(bperm_c$res, freq=TRUE, breaks=20, xlab="Simulated Geary's C")
 abline(v=0.6907223, col="red")
 ```
 
-The simulated results for Moran's I and Geary's C are the same. That is, the test statistics are significant and that there's some degree of clustering on the map.
+The simulated results for Moran's I and Geary's C statistics are the same. That is, the test statistics are significant and that there's some degree of clustering on the map.
 
 ## 4.5 Spatial Correlogram
 
@@ -309,7 +309,7 @@ Spatial correlograms are great to examine patterns of spatial autocorrelation in
 
 ### 4.5.1 Compute Moran's I Correlogram
 
-In the code chunk below, [*sp.correlogram()*](https://r-spatial.github.io/spdep/reference/sp.correlogram.html) of **spdep** package is used to compute a 6-lag spatial correlogram of GDPPC.
+In the code chunk below, [*sp.correlogram()*](https://r-spatial.github.io/spdep/reference/sp.correlogram.html) of **spdep** package is used to compute a 6-lag spatial correlogram of GDPPC. This will equivalent to examining the 1st to 6th order neighbors of each county.
 
 ```{r}
 # Method = "I" for Moran's I
@@ -320,6 +320,8 @@ MI_corr <- sp.correlogram(wm_q,
                           style="W")
 plot(MI_corr)
 ```
+
+The Correlogram above shows the diffusing effect of the clustering with each increase in spatial lag of neighbors. That is, back to Tobler's first law, near neighbors will contribute more to the clustering than distant neighbors. If the Moran's I statistic of lag 2 to lag 6 decreases at a slower rate, this would also mean that the clustering has a wider spread. In practice, the correlogram can used by urban planners to examine whether the development in a region should be spread to its neighboring regions and study the possible implications to do so.
 
 To understand if all autocorrelation values are statistically significant, we examine the full analysis results with the following code chunk:
 
@@ -478,15 +480,19 @@ nci <- moran.plot(hunan$GDPPC, rswm_q,
                   ylab="Spatially Lag GDPPC 2012")
 ```
 
-Notice that the plot is split in 4 quadrants. The x-axis represents values the values at location *i*, while the y-axis represents values in the neighborhood of location *i*. Therefore, values in the top-right of the scatterplot represent locations in which the attribute at *i* and its neighbors are well above the mean, indicating positive spatial autocorrelation. In the above, the top right corner belongs to areas that have high GDPPC and are surrounded by other areas that also have above average level of GDPPC.
+Notice that the plot is split in 4 quadrants. The x-axis represents the values at location *i*, while the y-axis represents values in the neighborhood of location *i*. Therefore, values in the top-right of the scatterplot represent locations in which the attribute at *i* and its neighbors are well above the mean, indicating positive spatial autocorrelation. In the above, the top right corner belongs to areas that have high GDPPC and are surrounded by other areas that also have above average level of GDPPC (*high-high* spatial autocorrelation).
 
-Points in the lower-left corner of the plot indicate locations in which the attribute at *i* and its neighbors are below the mean; this also represents locations of positive spatial autocorrelation because nearby locations are similar.
+Points in the lower-left corner of the plot indicate locations in which the attribute at *i* and its neighbors are below the mean; this also represents locations of positive spatial autocorrelation because nearby locations are similar (*low-low* spatial autocorrelation) . In contrast, the lower-right and upper-left quadrant correspond to negative spatial autocorrelation (dissimilar values at neighboring locations and hence treated as outliers). We refer to them as respectively *high-low* and *low-high* spatial autocorrelation.
 
 The solid diagonal line is a best-fit line through the points, indicating the presence of positive spatial autocorrelation throughout the entire dataset. Note that points represent with a diamond shape are values that are deemed to be significant at a specific level of confidence; the numbers next to these points simply represent their ID number. 
 
+::: callout-note
+## It is important to keep in mind that the classification as such does not imply significance.
+:::
+
 ### 4.7.2 Plot Moran scatterplot with standardised variable
 
-First we se [*scale()*](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/scale) to centers and scales the variable. Here centering is done by subtracting the mean (omitting NAs) the corresponding columns, and scaling is done by dividing the (centered) variable by their standard deviations.
+First we use [*scale()*](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/scale) to centers and scales the variable. Here centering is done by subtracting the mean (omitting NAs) the corresponding columns, and scaling is done by dividing the (centered) variable by their standard deviations.
 
 ```{r}
 hunan$Z.GDPPC <- scale(hunan$GDPPC) %>% as.vector 
@@ -514,13 +520,14 @@ quadrant <- vector(mode="numeric",length=nrow(localMI))
 Next, we centers the variable of interest around its mean.
 
 ```{r}
-DV <- hunan$GDPPC - mean(hunan$GDPPC)     
+hunan$lag_GDPPC <- lag.listw(rswm_q, hunan$GDPPC)
+DV <- hunan$lag_GDPPC - mean(hunan$lag_GDPPC)          
 ```
 
 This is follow by centering the local Moran's around the mean.
 
 ```{r}
-C_mI <- localMI[,1] - mean(localMI[,1])    
+LM_I <- localMI[,1] - mean(localMI[,1])    
 ```
 
 Next, we will set a statistical significance level for the local Moran.
@@ -529,13 +536,24 @@ Next, we will set a statistical significance level for the local Moran.
 signif <- 0.05       
 ```
 
-The following four command lines define the high-high, low-low, low-high and high-low categories.
+The following four command lines define the low-low (1), low-high (2), high-low (3) and high-high (4) categories.
 
 ```{r}
-quadrant[DV >0 & C_mI>0] <- 4      
-quadrant[DV <0 & C_mI<0] <- 2      
-quadrant[DV <0 & C_mI>0] <- 1
-quadrant[DV >0 & C_mI<0] <- 3
+# LM_I > 0 => Positive Autocorrelation, DV < 0 => Low
+# Low-Low => Low and neighbors are Low
+quadrant[DV <0 & LM_I>0] <- 1 
+
+# LM_I<0 => Negative Autocorrelation, DV > 0 => High neigbors
+# Low-High => Low outlier among High neighbors
+quadrant[DV >0 & LM_I<0] <- 2
+
+# LM_I < 0 => Negative Autocorrelation, DV < 0 => Low neighors
+# High-Low => High outlier among Low neighbors
+quadrant[DV <0 & LM_I<0] <- 3  
+
+# LM_I > 0 => Positive Autocorrelation, DV > 0 => High
+# High - High => High and neighbors are High
+quadrant[DV >0 & LM_I>0] <- 4      
 ```
 
 Lastly, places non-significant Moran in the category 0.
