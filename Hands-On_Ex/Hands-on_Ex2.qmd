@@ -321,7 +321,7 @@ MI_corr <- sp.correlogram(wm_q,
 plot(MI_corr)
 ```
 
-The Correlogram above shows the diffusing effect of the clustering with each increase in spatial lag of neighbors. That is, back to Tobler's first law, near neighbors will contribute more to the clustering than distant neighbors. If the Moran's I statistic of lag 2 to lag 6 decreases at a slower rate, this would also mean that the clustering has a wider spread. In practice, the correlogram can used by urban planners to examine whether the development in a region should be spread to its neighboring regions and study the possible implications to do so.
+The Correlogram above shows the diffusing effect of the clustering with each increase in spatial lag of neighbors. That is, back to Tobler's first law, near neighbors will contribute more to the clustering than distant neighbors. If the Moran's I statistics of lag 2 to lag 6 decrease at a slower rate, this would mean that the clustering has a wider spread (between the lag 2 and lag 6 neighbors). In practice, the correlogram can used by urban planners to examine whether the development in a region should be spread to its neighboring regions and study the possible implications of doing so.
 
 To understand if all autocorrelation values are statistically significant, we examine the full analysis results with the following code chunk:
 
