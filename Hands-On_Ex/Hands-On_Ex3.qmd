@@ -692,9 +692,15 @@ title(main="Neighbor Network (Queen Contiguity)")
 ## If we plot the network first and then the boundaries, some of the areas will be clipped. This is because the plotting area is determined by the characteristics of the first plot. In this example, because the boundary map extends further than the graph, we plot it first.
 :::
 
-### 5.8.3 Compute minimum spanning tree
+### 5.8.3 Compute Minimum Spanning Tree (MST)
+
+The MST is a graph that includes all the nodes in the network, but passes through each only once. So, it reduces the complexity of the original graph to one where each node is connected to only one other node. The resulting tree has n nodes and n-1 edges. The \"minimum\" part pertains to a cost function that is minimized. The objective is to minimize the overall length (or cost) of the tree. In its simplest form, the cost consists of the distances between the nodes. Here, however, a more general measure of cost is used in the form of the multivariate dissimilarity measure between each pair of nodes. This is based on a multivariate Euclidean distance between the standardized values for the variables, as was the case in the other clustering algorithms.
+
+![](images/paste-EC021FFF.png){width="676"}
 
 #### 5.8.3.1 Calculate edge costs
+
+The first step in the process is to compute the costs associated with each edge in the neighbor list. In other words, for each observation, the dissimilarity is computed between it and each of its neighbors (as defined by the neighbor list). In the **spdep** package, this is carried out by the **nbcosts** function. Its arguments are the neighbor list and the standardized data frame.
 
 Next, [*`nbcosts()`*](https://r-spatial.github.io/spdep/reference/nbcosts.html) of spdep package is used to compute the cost of each edge. It is the distance between it nodes. This function compute this distance using a data.frame with observations vector in each node.
 
@@ -721,7 +727,7 @@ summary(shan.w)
 
 ### 5.8.4 Compute the minimum spanning tree
 
-The minimum spanning tree is computed by mean of the [*mstree()*](https://r-spatial.github.io/spdep/reference/mstree.html) of **spdep** package as shown in the code chunk below.
+The minimum spanning tree is computed by mean of the [*mstree()*](https://r-spatial.github.io/spdep/reference/mstree.html) of **spdep** package as shown in the code chunk below. The only required argument is the weights object. It summarizes the tree by giving each edge as the pair of connected nodes, followed by the cost associated with that edge.
 
 ```{r}
 shan.mst <- mstree(shan.w)
@@ -785,7 +791,7 @@ The result of the *`skater()`* is an object of class **skater**. We can examine 
 str(clust6)
 ```
 
-The most interesting component of this list structure is the groups vector that contains the labels of the cluster to which each observation belongs (as before, the label itself is arbitary). This is followed by a detailed summary for each cluster in the edges.groups list. Sum of squares measures are given as ssto for the total and ssw to show the effect of each cut on the overall criterion.
+The most interesting component of this list structure is the groups vector that contains the labels of the cluster to which each observation belongs (as before, the label itself is arbitrary). This is followed by a detailed summary for each cluster in the edges.groups list. Sum of squares measures are given as ssto for the total and ssw to show the effect of each cut on the overall criterion.
 
 We can check the cluster assignment by using the code chunk below.
 
@@ -796,7 +802,7 @@ ccs6
 
 We can find out how many observations are in each cluster by means of the table command.
 
-We can also find this as the dimension of each vector in the lists contained in edges.groups. For example, the first list has node with dimension 12, which is also the number of observations in the first cluster.
+We can also find this as the dimension of each vector in the lists contained in edges.groups. `For example, the first list has node with dimension 12, which is also the number of observations in the first cluster??.`
 
 ```{r}
 table(ccs6)
