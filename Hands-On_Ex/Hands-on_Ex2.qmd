@@ -4,9 +4,9 @@ author: "KB"
 editor: visual
 ---
 
-Updated on 28-Nov-22
+Updated on 28-Nov-2022
 
-(First published on 25-Nov-22)
+(First published on 25-Nov-2022)
 
 # 4.Global and Local Measures of Spatial Autocorrelation
 
