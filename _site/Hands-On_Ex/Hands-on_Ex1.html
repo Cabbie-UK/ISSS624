@@ -154,6 +154,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <a class="dropdown-item" href="../Hands-On_Ex/Hands-on_Ex2.html">
  <span class="dropdown-text">Hands-on Exercise 2</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../Hands-On_Ex/Hands-on_Ex3.html">
+ <span class="dropdown-text">Hands-on Exercise 3</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -165,7 +169,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </li>  
         <li>
     <a class="dropdown-item" href="../In-Class_Ex/In-Class_Ex2.html">
- <span class="dropdown-text">In-Class Exercise 2</span></a>
+ <span class="dropdown-text">In-class Exercise 2</span></a>
   </li>  
     </ul>
   </li>
@@ -1034,18 +1038,13 @@ First 10 features:
 <span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">ECONOMIC ACTIVE</span><span class="st">`</span> <span class="sc">&gt;</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: `funs()` was deprecated in dplyr 0.8.0.
-Please use a list of either functions or lambdas: 
+ℹ Please use a list of either functions or lambdas:
 
-  # Simple named list: 
-  list(mean = mean, median = median)
+# Simple named list: list(mean = mean, median = median)
 
-  # Auto named with `tibble::lst()`: 
-  tibble::lst(mean, median)
+# Auto named with `tibble::lst()`: tibble::lst(mean, median)
 
-  # Using lambdas
-  list(~ mean(., trim = .2), ~ median(., na.rm = TRUE))
-This warning is displayed once every 8 hours.
-Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</code></pre>
+# Using lambdas list(~ mean(., trim = .2), ~ median(., na.rm = TRUE))</code></pre>
 </div>
 </div>
 <p>Next, <em>left_join()</em> of <strong>dplyr</strong> is used to join the geographical data and attribute table using planning subzone name e.g.&nbsp;<em>SUBZONE_N</em> and <em>SZ</em> as the common identifier.</p>
