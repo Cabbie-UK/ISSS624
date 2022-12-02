@@ -4,6 +4,10 @@ author: "KB"
 editor: visual
 ---
 
+Updated on 2-Dec-2022
+
+(First published on 25-Nov-2022)
+
 # Spatial Weights and Applications
 
 ## 3.1 Overview
@@ -28,10 +32,11 @@ Two datasets are used in this exercise. They are:
 
 ## 3.3 Getting Started
 
-The code chunks below will install and load the 4 packages needed for this exericse.
+The code chunks below will install and load the 5 packages needed for this exericse.
 
 ```{r}
-pacman::p_load(sf, tidyverse, spdep, tmap) # wrapper for install and load library
+pacman::p_load(sf, tidyverse, spdep, tmap, knitr) 
+# pacman is a wrapper for installation and loading of libraries
 ```
 
 ## 3.4 Import data into R for analysis
@@ -263,7 +268,7 @@ We need to determine the upper limit for distance band by using the steps below 
 # Covers the first 2 points above to prepare a list of nearest neighbor for each area unit
 k1 = knn2nb(knearneigh(coords,k=1))
 
-# Covers the 3rd and 4th point above to return a vecotor of distances between the area unit and its nearest neighbor
+# Covers the 3rd and 4th point above to return a vector of distances between the area unit and its nearest neighbor
 k1dists <- unlist(nbdists(k1, coords, longlat = TRUE))
 
 #Summarise the results
@@ -283,7 +288,12 @@ wm_d62 = dnearneigh(coords, 0, 62, longlat = TRUE) # longlat = TRUE if point coo
 wm_d62
 ```
 
-Based on the above, within a distance of 62 km for each area unit, the average number of links or connections that the area units have is 3.7.
++-------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| *What is the meaning of "Average number of links: 3.681818" shown above?*                                                                                         |
+|                                                                                                                                                                   |
+| \                                                                                                                                                                 |
+| This means that based on the above, within a distance of 62 km for each area unit, the average number of connections or neighbors that the area units has is 3.7. |
++-------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 #### 3.6.2.2 Display the content of wm_d62 weight matrix using str()
 
@@ -380,7 +390,7 @@ head(ids)
 Next, we need to assign weights to each neighboring polygon using the [nb2listw()](https://www.rdocumentation.org/packages/spdep/versions/1.2-7/topics/nb2listw) function. In our case, each neighboring polygon is assigned equal weight (style="W") for simplicity's sake. This is accomplished by assigning the fraction 1/(#ofneighbors) to each neighboring county then summing the weighted income values. While this is the most intuitive way to summaries the neighbors' values it has one drawback in that polygons along the edges of the study area will base their lagged values on fewer polygons thus potentially over- or under-estimating the true nature of the spatial autocorrelation in the data. Note that other more robust options are available, notably style="B".
 
 ```{r}
-#zero.policy=TRUE option allows for lists of non-neighbors. This should be used with caution since the user may not be aware of missing neighbors in the dataset
+#zero.policy=TRUE option allows for lists of neighbors with zero values (as opposed to NA). This should be used with caution since the user may not be aware of missing neighbors in the dataset
 # Coding style = "W" means row standardisation is used
 rswm_q <- nb2listw(wm_q, style="W", zero.policy = TRUE)
 rswm_q
@@ -538,125 +548,161 @@ The spatial window average uses row-standardized weights and includes the diagon
 
 ![](images/paste-CEC39989.png)
 
-We first assign wm_q to a new variable because we will directly alter its structure to add the diagonal elements.
-
-```{r}
-wm_q1 <- wm_q
-```
-
 To add the diagonal element to the neighbour list, we just need to use *include.self()* from **spdep**.
 
 ```{r}
-include.self(wm_q1)
+wm_qs <- include.self(wm_q)
+
+wm_qs
 ```
 
-We obtain the new weights with *nb2listw()*
+Notice that the Number of nonzero links, Percentage nonzero weights and Average number of links are 536, 6.921488 and 6.090909 respectively as compared to wm_q of 448, 5.785124 and 5.090909
+
+Let us take a good look at the neighbour list of area \[1\] by using the code chunk below.
 
 ```{r}
-wm_q1 <- nb2listw(wm_q1)
-wm_q1
+wm_qs[[1]]
 ```
 
-Again, we create the lag variable from our weight structure and GDPPC variable.
+Notice that now \[1\] has six neighbours instead of five.
+
+Now we obtain weights with *nb2listw()*
 
 ```{r}
-lag_w_avg_gpdpc <- lag.listw(wm_q1, 
+wm_qs <- nb2listw(wm_qs)
+
+wm_qs
+```
+
+Again, we use *nb2listw()* and *glist()* to explicitly assign weight values.
+
+Lastly, we just need to create the lag variable from our weight structure and GDPPC variable.
+
+```{r}
+lag_w_avg_gpdpc <- lag.listw(wm_qs, 
                              hunan$GDPPC)
 lag_w_avg_gpdpc
 ```
 
-The code chunk below will be used to append *lag_window_avg GDPPC* values onto *hunan* sf data.frame by using *left_join()* of **dplyr** package.
+Next, we will convert the lag variable listw object into a data.frame by using *as.data.frame()*.
 
 ```{r}
-lag.list.wm_q1 <- list(hunan$NAME_3, lag.listw(wm_q1, hunan$GDPPC))
-lag_wm_q1.res <- as.data.frame(lag.list.wm_q1)
-colnames(lag_wm_q1.res) <- c("NAME_3", "lag_window_avg GDPPC")
-hunan <- left_join(hunan, lag_wm_q1.res)
+lag.list.wm_qs <- list(hunan$NAME_3, lag.listw(wm_qs, hunan$GDPPC))
+lag_wm_qs.res <- as.data.frame(lag.list.wm_qs)
+colnames(lag_wm_qs.res) <- c("NAME_3", "lag_window_avg GDPPC")
 ```
 
-We use *qtm()* of **tmap** package is used to plot the GDPPC and lag_window_avg GDPPC map next to each other for quick comparison.
+::: callout-note
+## The third command line on the code chunk above renames the field names of lag_wm_q1.res object into NAME_3 and lag_window_avg GDPPC respectively.
+:::
+
+Next, the code chunk below will be used to append *lag_window_avg GDPPC* values onto *hunan* sf data.frame by using *left_join()* of **dplyr** package.
 
 ```{r}
-gdppc =   qtm(hunan, "GDPPC")+
-          tm_layout(main.title = "Distribution of GDPPC, 2012 \n   ",
-          main.title.position = "center",
-          main.title.size = 1.2,
-          legend.height = 0.26, 
-          legend.width = 0.40)
+hunan <- left_join(hunan, lag_wm_qs.res)
+```
 
-w_avg_gdppc = qtm(hunan, "lag_window_avg GDPPC") + 
-            tm_layout(main.title = "Distn of Lag_Window Avg GDPPC\n(row-std wghts plus diagonal element)",
+To compare the values of lag GDPPC and Spatial window average, `kable()` of Knitr package is used to prepare a table using the code chunk below.
+
+```{r}
+hunan %>%
+  select("County", "lag GDPPC", "lag_window_avg GDPPC") %>%
+  kable()
+```
+
+Lastly, we use *qtm()* of **tmap** package is used to plot the lag_GDPPC and w_ave_gdppc map next to each other for quick comparison.
+
+```{r}
+# lag_gdppc map is defined in section 3.8.1 above
+
+w_avg_gdppc <- qtm(hunan, "lag_window_avg GDPPC") + 
+  tm_layout(main.title = "Distribution of Spatial Window \nAverage GDPPC, 2012",
             main.title.position = "center",
             main.title.size = 1.2,
             legend.height = 0.26, 
-            legend.width = 0.40)  
+            legend.width = 0.40)
 
-tmap_arrange(gdppc, w_avg_gdppc, asp=1, ncol=2)
+
+tmap_arrange(lag_gdppc, w_avg_gdppc, asp=1, ncol=2)
 ```
+
+::: callout-note
+## For more effective comparison, it is advisible to use the core tmap mapping functions.
+:::
 
 ### 3.8.4 Spatial window sum
 
-The spatial window sum is the counterpart of the window average, but without using row-standardized weights. To do this we assign binary weights to the neighbor structure that includes the diagonal element.
-
-```{r}
-wm_q2 <- wm_q
-```
+The spatial window sum is the counterpart of the window average, but without using row-standardized weights.
 
 To add the diagonal element to the neighbour list, we just need to use *include.self()* from **spdep**.
 
 ```{r}
-include.self(wm_q2)
+wm_qs <- include.self(wm_q)
+wm_qs
 ```
 
-Next, we assign binary weights to the neighbor structure that includes the diagonal element.
+Next, we will assign binary weights to the neighbor structure that includes the diagonal element.
 
 ```{r}
-b_weights3 <- lapply(wm_q2, function(x) 0*x + 1)
-b_weights3[1]
+b_weights <- lapply(wm_qs, function(x) 0*x + 1)
+b_weights[1]
 ```
 
-We use *nb2listw()* and *glist()* to explicitly assign weight values.
+Notice that now \[1\] has six neighbours instead of five.
+
+Again, we use *nb2listw()* and *glist()* to explicitly assign weight values
 
 ```{r}
-b_weights4 <- nb2listw(wm_q2, 
-                       glist = b_weights3, 
+b_weights2 <- nb2listw(wm_qs, 
+                       glist = b_weights, 
                        style = "B")
-b_weights4
+b_weights2
 ```
 
-With the new weight structure, we can compute the lag variable with *lag.listw()*.
+With our new weight structure, we can compute the lag variable with *lag.listw()*.
 
 ```{r}
-w_sum_gdppc = list(hunan$NAME_3, lag.listw(b_weights4, hunan$GDPPC))
+w_sum_gdppc <- list(hunan$NAME_3, lag.listw(b_weights2, hunan$GDPPC))
 w_sum_gdppc
 ```
 
-The code chunk below will be used to append *w_sum GDPPC* values onto *hunan* sf data.frame by using *left_join()* of **dplyr** package.
+Next, we will convert the lag variable listw object into a data.frame by using *as.data.frame()*.
 
 ```{r}
-w_sum_gdppc.res = as.data.frame(w_sum_gdppc)
+w_sum_gdppc.res <- as.data.frame(w_sum_gdppc)
 colnames(w_sum_gdppc.res) <- c("NAME_3", "w_sum GDPPC")
+```
+
+::: callout-note
+## The second command line on the code chunk above renames the field names of w_sum_gdppc.res object into NAME_3 and w_sum GDPPC respectively.
+:::
+
+Next, the code chunk below will be used to append *w_sum GDPPC* values onto *hunan* sf data.frame by using *left_join()* of **dplyr** package.
+
+```{r}
 hunan <- left_join(hunan, w_sum_gdppc.res)
 ```
 
-We use *qtm()* of **tmap** package to plot the GDPPC and lag_sum GDPPC map next to each other for quick comparison.
+To compare the values of lag GDPPC and Spatial window average, `kable()` of Knitr package is used to prepare a table using the code chunk below.
 
 ```{r}
-gdppc =  qtm(hunan, "GDPPC") +
-          tm_layout(main.title = "Distribution of GDPPC, 2012 \n   ",
-          main.title.position = "center",
-          main.title.size = 1.2,
-          legend.height = 0.26, 
-          legend.width = 0.40)
+hunan %>%
+  select("County", "lag_sum GDPPC", "w_sum GDPPC") %>%
+  kable()
+```
 
-w_sum_gdppc <- qtm(hunan, "w_sum GDPPC") + 
-            tm_layout(main.title = "Distn of Lag_sum GDPPC\n(lag sum plus diagonal element)",
+Lastly, *qtm()* of **tmap** package is used to plot the lag_sum GDPPC and w_sum_gdppc maps next to each other for quick comparison.
+
+```{r}
+# lag_sum_gdppc map is defined in section 3.8.2 above
+
+w_sum_gdppc <- qtm(hunan, "w_sum GDPPC")+ 
+  tm_layout(main.title = "Distribution of Spatial Window \nSum GDPPC, 2012",
             main.title.position = "center",
             main.title.size = 1.2,
             legend.height = 0.26, 
-            legend.width = 0.40)  
-
-tmap_arrange(gdppc, w_sum_gdppc, asp=1, ncol=2)
+            legend.width = 0.40)
 
 
+tmap_arrange(lag_sum_gdppc, w_sum_gdppc, asp=1, ncol=2)
 ```
