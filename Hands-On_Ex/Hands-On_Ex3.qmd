@@ -881,7 +881,7 @@ In this section, you will gain hands-on experience on using functions provided b
 
 ### 5.9.1 Ward-like hierarchical clustering: ClustGeo
 
-ClustGeo package provides function called `hclustgeo()` to perform a typical Ward-like hierarchical clustering just like `hclust()` you learned in previous section. This [only works]{.underline} with ward method.
+ClustGeo package provides function called `hclustgeo()` to perform a typical Ward-like hierarchical clustering just like `hclust()` you learned in previous section. This [only works]{.underline} with the Ward method.
 
 To perform non-spatially constrained hierarchical clustering, we only need to provide the function a dissimilarity matrix as shown in the code chunk below.
 
@@ -893,11 +893,11 @@ rect.hclust(nongeo_cluster,
             border = 2:5)
 ```
 
-Note that the dissimilarity matrix must be an object of class `dist`, i.e. an object obtained with the function `dist()`. For sample code chunk, please refer to [5.7.6 Computing proximity matrix](https://r4gdsa.netlify.app/chap05.html#computing-proximity-matrix)
+Note that the dissimilarity matrix must be an object of class `dist`, i.e. an object obtained with the function `dist()`. For sample code chunk, please refer to 5.7.3 Computing proximity matrix
 
 #### 5.9.1.1 Mapping the clusters formed
 
-Similarly, we can plot the clusters on a categorical area shaded map by using the steps we learned in 5.7.12 Mapping the clusters formed.
+Similarly, we can plot the clusters on a categorical area shaded map by using the steps we learned in 5.7.9 Mapping the clusters formed.
 
 ```{r}
 groups <- as.factor(cutree(nongeo_cluster, k=6))
@@ -931,9 +931,12 @@ Next, `choicealpha()` will be used to determine a suitable value for the mixing 
 
 ```{r}
 cr <- choicealpha(proxmat, distmat, range.alpha = seq(0, 1, 0.1), K=6, graph = TRUE)
+# the 0.1 in the range.alpha argument indicates that the break points should be at 0.1 interval
+# To note that the argument name for number of clusters in in capital K
+# graph = True is to plot the 2 graphs below
 ```
 
-With reference to the graphs above, alpha = 0.3 will be used as shown in the code chunk below.
+With reference to the graphs above, alpha = 0.3 will be used as shown in the code chunk below. This is derived with reference to the Standardised Chart (with y-axis Qnorm). It shows that about 0.6 (or 60%) of the geospatial data is reflected with only a 0.2 (or 20%) reduction in aspatial data.
 
 ```{r}
 clustG <- hclustgeo(proxmat, distmat, alpha = 0.3)
