@@ -1,10 +1,15 @@
 ---
-title: "Hands-On Exercise 3"
+title: "Hands-On Exercise 3/ In-class Exercise 3"
 author: "KB"
 editor: visual
+format: html
+execute: 
+  warning: false
 ---
 
-First published on: 2-Dec-2022
+Updated on: 3-Dec-2022
+
+(First published on: 2-Dec-2022)
 
 # 5  Geographical Segmentation with Spatially Constrained Clustering Techniques
 
@@ -69,7 +74,7 @@ The code chunk below installs and launches these R packages into R environment.
 ```{r}
 pacman::p_load(rgdal, spdep, tmap, sf, 
                ggpubr, cluster, factoextra, NbClust,
-               heatmaply, corrplot, psych, tidyverse)
+               heatmaply, corrplot, psych, tidyverse, ClustGeo)
 ```
 
 ## 5.4 Data Import and Prepatation
@@ -81,6 +86,9 @@ The Myanmar Township Boundary GIS data is in ESRI shapefile format. It will be i
 The code chunk used is shown below:
 
 ```{r}
+#| eval: true
+#| echo: true
+
 shan_sf <- st_read(dsn = "Hands-On_Ex3/data/geospatial", 
                    layer = "myanmar_township_boundaries") %>%
   filter(ST %in% c("Shan (East)", "Shan (North)", "Shan (South)"))
@@ -130,6 +138,7 @@ ict_derived <- ict %>%
   mutate(`MPHONE_PR` = `Mobile phone`/`Total households`*100) %>%
   mutate(`COMPUTER_PR` = `Computer`/`Total households`*100) %>%
   mutate(`INTERNET_PR` = `Internet at home`/`Total households`*100) %>%
+  # rename some of the columns to match them to those used in the shapefile
   rename(`DT_PCODE` =`District Pcode`,`DT`=`District Name`,
          `TS_PCODE`=`Township Pcode`, `TS`=`Township Name`,
          `TT_HOUSEHOLDS`=`Total households`,
@@ -154,7 +163,7 @@ We can plot the distribution of the variables (i.e. Number of households with r
 
 Histogram is useful to identify the overall distribution of the data values (i.e. left skew, right skew or normal distribution)
 
-```{r}
+```{r, fig.width=4,fig.height=3}
 ggplot(data=ict_derived, 
        aes(x=`RADIO`)) +
   geom_histogram(bins=20, 
@@ -165,12 +174,12 @@ ggplot(data=ict_derived,
 
 Boxplot is useful to detect if there are outliers in the data.
 
-```{r}
+```{r, fig.width=4,fig.heig}
 ggplot(data=ict_derived, 
        aes(x=`RADIO`)) +
   geom_boxplot(color="black", 
                fill="light blue") + 
-  ggtitle("Distribution of Househodls with radio \n(Boxplot)")
+  ggtitle("Distribution of Househodls with radio (Boxplot)")
 ```
 
 Next, we also plot the distribution of the newly derived variables (i.e. Radio penetration rate) by using the code chunk below.
@@ -258,6 +267,7 @@ Before we prepare the choropleth map, we need to combine both the geospatial dat
 The code chunks below is used to perform the task. The unique identifier used to join both data objects is *TS_PCODE*.
 
 ```{r}
+# if we want to retain the spatial data, the geospatial data file should be the left file. In this case, it's the shan_sf sf file.
 shan_sf_joined <- left_join(shan_sf, 
                      ict_derived, by=c("TS_PCODE"="TS_PCODE"))
 ```
@@ -339,7 +349,9 @@ Before we perform cluster analysis, it is important for us to ensure that the cl
 In this section, we use [*corrplot.mixed()*](https://cran.r-project.org/web/packages/corrplot/corrplot.pdf) function of [**corrplot**](https://cran.r-project.org/web/packages/corrplot/vignettes/corrplot-intro.html) package to visualise and analyse the correlation of the input variables.
 
 ```{r}
+# Only select columns 12 to 16 from the data.frame
 cluster_vars.cor = cor(ict_derived[,12:17])
+
 corrplot.mixed(cluster_vars.cor,
                lower = "ellipse", 
                upper = "number",
@@ -360,6 +372,7 @@ The code chunk below extracts the clustering variables from the *shan_sf_joined*
 
 ```{r}
 cluster_vars <- shan_sf_joined %>%
+  # The st_set_geometry is to remove the geomerty data from the final output
   st_set_geometry(NULL) %>%
   select("TS.x", "RADIO_PR", "TV_PR", "LLPHONE_PR", "MPHONE_PR", "COMPUTER_PR")
 head(cluster_vars,10)
@@ -371,7 +384,7 @@ head(cluster_vars,10)
 
 Notice that the final clustering variables list does not include variable INTERNET_PR because it is highly correlated with variable COMPUTER_PR.
 
-Next, we set township name (*Ts.x* column) as the row names using the code chunk below.
+Next, we set township name (*Ts.x* column) as the row names using the code chunk below so that the clustering algorithm won't use the township name for clustering.
 
 ```{r}
 # Step 1: Assign the TS.x column as the row names of the cluster_var dataframe
@@ -472,7 +485,7 @@ proxmat <- dist(shan_ict, method = 'euclidean')
 
 The code chunk below can then be used to list the content of *proxmat* for visual inspection.
 
-```{r}
+```{r echo=TRUE}
 proxmat
 ```
 
@@ -492,11 +505,12 @@ We can then plot the tree by using `plot()` of R Graphics as shown in the code c
 
 ```{r}
 plot(hclust_ward, cex = 0.6)
+# cex is to scale down the plot to 60%, to prevent the township labels from overlapping
 ```
 
 ### 5.7.5 Selecting the optimal clustering algorithm
 
-One of the challenge in performing hierarchical clustering is to identify stronger clustering structures. The issue can be solved by using use [*agnes()*](https://www.rdocumentation.org/packages/cluster/versions/2.1.0/topics/agnes) function of [**cluster**](https://cran.r-project.org/web/packages/cluster/) package. It functions like *hclus()*, however, with the *agnes()* function you can also get the agglomerative coefficient, which measures the amount of clustering structure found (values closer to 1 suggest strong clustering structure).
+One of the challenge in performing hierarchical clustering is to identify stronger clustering structures. The issue can be solved by using use [*agnes()*](https://www.rdocumentation.org/packages/cluster/versions/2.1.0/topics/agnes) function of [**cluster**](https://cran.r-project.org/web/packages/cluster/) package. It functions like *hclus()*, however, with the *agnes()* function you can also get the agglomerative coefficient, which measures the amount of clustering structure found (values closer to 1 suggest strong clustering structure) by comparing the homogeneity within the clusters .
 
 The code chunk below will be used to compute the agglomerative coefficients of 4 hierarchical clustering algorithms.
 
@@ -557,7 +571,7 @@ Next, we can visualise the plot by using [*`fviz_gap_stat()`*](https://rpkgs.dat
 fviz_gap_stat(gap_stat)
 ```
 
-From the gap statistic graph above, the recommended number of cluster to retain is 1. However, it is not logical to retain only one cluster. By examine the gap statistic graph, the 6-cluster gives the largest gap statistic and should be the next best cluster number to pick.
+From the gap statistic graph above, the recommended number of cluster to retain is 1 or 2. However, it is not logical to retain only one or 2 clusters. Ideally, we should have 3 or more clusters. By examining the gap statistic graph, the 6-cluster gives the next largest gap statistic and should be the next best cluster number to pick.
 
 ::: callout-note
 ## In addition to these commonly used approaches, the [NbClust](https://cran.r-project.org/web/packages/NbClust/) package, published by Charrad et al., 2014, provides 30 indices for determining the relevant number of clusters and proposes to users the best clustering scheme from the different results obtained by varying all combinations of number of clusters, distance measures, and clustering methods.
@@ -573,6 +587,8 @@ It's also possible to draw the dendrogram with a border around the selected clus
 
 ```{r}
 plot(hclust_ward, cex = 0.6)
+
+# rect is to set the rectangles
 rect.hclust(hclust_ward, 
             k = 6, 
             border = 2:7)
@@ -694,7 +710,7 @@ title(main="Neighbor Network (Queen Contiguity)")
 
 ### 5.8.3 Compute Minimum Spanning Tree (MST)
 
-The MST is a graph that includes all the nodes in the network, but passes through each only once. So, it reduces the complexity of the original graph to one where each node is connected to only one other node. The resulting tree has n nodes and n-1 edges. The \"minimum\" part pertains to a cost function that is minimized. The objective is to minimize the overall length (or cost) of the tree. In its simplest form, the cost consists of the distances between the nodes. Here, however, a more general measure of cost is used in the form of the multivariate dissimilarity measure between each pair of nodes. This is based on a multivariate Euclidean distance between the standardized values for the variables, as was the case in the other clustering algorithms.
+The MST is a graph that includes all the nodes in the network, but passes through each only once. So, it reduces the complexity of the original graph to one where each node is connected to only one other node. The resulting tree has n nodes and n-1 edges. The "minimum" part pertains to a cost function that is minimized. The objective is to minimize the overall length (or cost) of the tree. In its simplest form, the cost consists of the distances between the nodes. Here, however, a more general measure of cost is used in the form of the multivariate dissimilarity measure between each pair of nodes. This is based on a multivariate Euclidean distance between the standardized values for the variables, as was the case in the other clustering algorithms.
 
 ![](images/paste-EC021FFF.png){width="676"}
 
@@ -702,7 +718,7 @@ The MST is a graph that includes all the nodes in the network, but passes throug
 
 The first step in the process is to compute the costs associated with each edge in the neighbor list. In other words, for each observation, the dissimilarity is computed between it and each of its neighbors (as defined by the neighbor list). In the **spdep** package, this is carried out by the **nbcosts** function. Its arguments are the neighbor list and the standardized data frame.
 
-Next, [*`nbcosts()`*](https://r-spatial.github.io/spdep/reference/nbcosts.html) of spdep package is used to compute the cost of each edge. It is the distance between it nodes. This function compute this distance using a data.frame with observations vector in each node.
+Next, [*`nbcosts()`*](https://r-spatial.github.io/spdep/reference/nbcosts.html) of spdep package is used to compute the cost of each edge. It is the distance between 2 nodes, with reference to the provided attributes (in *shan_ict*). This function compute this distance using a data.frame with observations vector in each node.
 
 The code chunk below is used to compute the cost of each edge.
 
@@ -828,6 +844,7 @@ The code chunk below is used to plot the newly derived clusters by using SKATER 
 ```{r}
 groups_mat <- as.matrix(clust6$groups)
 
+# Join back to the sf data table for plotting. One pre-condition for just a combination is that we must not sort the dataframe in the earlier steps
 shan_sf_spatialcluster <- cbind(shan_sf_cluster, as.factor(groups_mat)) %>%
   rename(`SP_CLUSTER`=`as.factor.groups_mat.`)
 
@@ -856,4 +873,91 @@ shclust.map <- qtm(shan_sf_spatialcluster,
 
 tmap_arrange(hclust.map, shclust.map,
              asp=NA, ncol=2)
+```
+
+## 5.9 Spatially Constrained Clustering: ClustGeo Method
+
+In this section, you will gain hands-on experience on using functions provided by **ClustGeo** package to perform non-spatially constrained hierarchical cluster analysis and spatially constrained cluster analysis.
+
+### 5.9.1 Ward-like hierarchical clustering: ClustGeo
+
+ClustGeo package provides function called `hclustgeo()` to perform a typical Ward-like hierarchical clustering just like `hclust()` you learned in previous section. This [only works]{.underline} with ward method.
+
+To perform non-spatially constrained hierarchical clustering, we only need to provide the function a dissimilarity matrix as shown in the code chunk below.
+
+```{r}
+nongeo_cluster <- hclustgeo(proxmat)
+plot(nongeo_cluster, cex = 0.5)
+rect.hclust(nongeo_cluster, 
+            k = 6, 
+            border = 2:5)
+```
+
+Note that the dissimilarity matrix must be an object of class `dist`, i.e. an object obtained with the function `dist()`. For sample code chunk, please refer to [5.7.6 Computing proximity matrix](https://r4gdsa.netlify.app/chap05.html#computing-proximity-matrix)
+
+#### 5.9.1.1 Mapping the clusters formed
+
+Similarly, we can plot the clusters on a categorical area shaded map by using the steps we learned in 5.7.12 Mapping the clusters formed.
+
+```{r}
+groups <- as.factor(cutree(nongeo_cluster, k=6))
+```
+
+```{r}
+shan_sf_ngeo_cluster <- cbind(shan_sf, as.matrix(groups)) %>%
+  rename(`CLUSTER` = `as.matrix.groups.`)
+```
+
+```{r}
+qtm(shan_sf_ngeo_cluster, "CLUSTER") + 
+  tm_borders(alpha = 0.5) +
+  tm_layout(main.title = "ClustGeo Cluster Map",
+            main.title.position = "center",
+            main.title.size = 1.2) 
+```
+
+### 5.9.2 Spatially Constrained Hierarchical Clustering
+
+Before we can performed spatially constrained hierarchical clustering, a spatial distance matrix will be derived by using [`st_distance()`](https://r-spatial.github.io/sf/reference/geos_measures.html) of sf package.
+
+```{r}
+dist <- st_distance(shan_sf, shan_sf)
+distmat <- as.dist(dist)
+```
+
+Notice that `as.dist()` is used to convert the data frame into matrix.
+
+Next, `choicealpha()` will be used to determine a suitable value for the mixing parameter alpha as shown in the code chunk below.
+
+```{r}
+cr <- choicealpha(proxmat, distmat, range.alpha = seq(0, 1, 0.1), K=6, graph = TRUE)
+```
+
+With reference to the graphs above, alpha = 0.3 will be used as shown in the code chunk below.
+
+```{r}
+clustG <- hclustgeo(proxmat, distmat, alpha = 0.3)
+```
+
+Next, `cutree()` is used to derive the cluster objecct.
+
+```{r}
+groups <- as.factor(cutree(clustG, k=6))
+```
+
+We will then join back the group list with shan_sf polygon feature data frame by using the code chun below.
+
+```{r}
+shan_sf_Gcluster <- cbind(shan_sf, as.matrix(groups)) %>%
+  rename(`CLUSTER` = `as.matrix.groups.`)
+```
+
+We can now plot the map of the newly delineated spatially constrained clusters.
+
+```{r}
+qtm(shan_sf_Gcluster, "CLUSTER")  + 
+  tm_borders(alpha = 0.5) +
+  tm_layout(main.title = "ClustGeo Cluster Map \n(alpha = 0.3)",
+            main.title.position = "center",
+            main.title.size = 1.2) 
 ```
