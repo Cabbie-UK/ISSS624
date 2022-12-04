@@ -25,6 +25,8 @@ website:
         menu:
           - text: Take-home Execise 1
             href: Take-home_Ex/Take-home_Ex1.qmd
+          - text: Take-home Execise 2a
+            href: Take-home_Ex/Take-home_Ex2a.qmd
         
     right:
       - href: index.qmd

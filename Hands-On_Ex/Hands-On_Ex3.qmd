@@ -1,5 +1,5 @@
 ---
-title: "Hands-On Exercise 3/ In-class Exercise 3"
+title: "Hands-On Exercise 3/ In-Class Exercise 3"
 author: "KB"
 editor: visual
 format: html
@@ -7,7 +7,7 @@ execute:
   warning: false
 ---
 
-Updated on: 3-Dec-2022
+Updated on: 4-Dec-2022
 
 (First published on: 2-Dec-2022)
 
@@ -65,7 +65,7 @@ The R packages needed for this exercise are as follows:
 
 -   Choropleth mapping - tmap
 
--   Multivariate data visualisation and analysis - coorplot, ggpubr, and heatmaply
+-   Multivariate data visualisation and analysis - corrplot, ggpubr, and heatmaply
 
 -   Cluster analysis - cluster, and ClustGeo
 
