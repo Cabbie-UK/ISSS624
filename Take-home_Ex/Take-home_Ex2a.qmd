@@ -3,7 +3,9 @@ title: "In-Class Exercise 2a"
 editor: visual
 ---
 
-First published on: 4-Dec-2022
+Updated on: 5-Dec-2022
+
+(First published on: 4-Dec-2022)
 
 # Regionalisation with Spatially Constrained Cluster Analysis
 
@@ -78,14 +80,14 @@ The 2 steps needed to convert an asptial data file in wkt format into a sf data 
 
 ![](images/paste-6004C10D.png)
 
-2.  We use `st_sf()` to convert the tibble data frame into sf data frame.
+2.  We use `st_sf()` to convert the tibble data frame into a sf data frame.
 
 ```{r}
 #| eval: false
 wp_sf <- st_sf(wp_nga, crs=4326) 
 ```
 
-When the process completed, a new sf data frame called *wp_sf* will be created.
+When the process is completed, a new sf data frame called *wp_sf* will be created.
 
 ```{r}
 #| eval: false
@@ -96,7 +98,7 @@ wp_sf
 
 ### 3.2 Niegeria LGA level boundary data
 
-Shapefile downloaded from [geoBoundaries](https://www.geoboundaries.org/) portal will imported in st_read of sf package.
+Shapefile downloaded from [geoBoundaries](https://www.geoboundaries.org/) portal will be imported in st_read of sf package.
 
 ```{r}
 #| eval: false
@@ -108,9 +110,9 @@ nga <- st_read(dsn = "Take-Home_Ex2a/data",
 
 ## 4 Point in Polygon Overlay
 
-Although *wp_sf* sf data frame consists of a field called *#clean_adm2* which by right should provide the LGA name of the water point. However, it is always a good practice to be more caution when dealing with external data.
+Although *wp_sf* sf data frame consists of a field called *#clean_adm2* which by right should provide the LGA name of the water point, it is always a good practice to be more cautious when dealing with external data.
 
-In this section, we are going to use a geoprocessing function (or commonly know as GIS analysis) called **point-in-polygon overlay** to transfer the attribute information in *nga* sf data frame into *wp_sf* data frame.
+In this section, we are going to use a geoprocessing function (or commonly known as GIS analysis) called **point-in-polygon overlay** to transfer the attribute information in *nga* sf data frame into *wp_sf* data frame.
 
 ```{r}
 #| eval: false

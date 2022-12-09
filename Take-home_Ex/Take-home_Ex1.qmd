@@ -6,7 +6,9 @@ editor: visual
 
 ![](images/paste-18F74B6F.png)
 
-First published on: 30-Nov-2022
+Updated on 6-Dec-2022
+
+(First published on: 30-Nov-2022)
 
 # Geospatial Analytics for Social Good
 
@@ -274,7 +276,7 @@ We use the `st_is_valid()` function from sf package to check whether the geometr
 length(which(st_is_valid(nga_wp) == FALSE))
 ```
 
-This is no invalid geometries
+This is no invalid geometry
 
 ### 4.2 Missing values
 
@@ -300,7 +302,7 @@ We first check the coordinate system of nga_wp_processed using `st_crs()` of the
 st_crs(nga_wp_processed)
 ```
 
-We note that the geometry information is reflected in under WGS 84, a Geographic Coordinate System (GCS) which uses a 3-dimensional spherical surface to define locations on the earth. For our study, we will transform the geometry to Projected Coordinate System which translates GCS data a 2-dimensional surface using `st_transform()` of the sf package. The Projected Coordinate Systems of Nigeria is EPSG: 26391.
+We note that the geometry information is reflected under WGS 84, a Geographic Coordinate System (GCS) which uses a 3-dimensional spherical surface to define locations on the earth. For our study, we will transform the geometry to Projected Coordinate System which translates GCS data into a 2-dimensional surface using `st_transform()` of the sf package. The Projected Coordinate Systems of Nigeria is EPSG: 26391.
 
 ```{r}
 nga_wp_projected <- st_transform(nga_wp_processed, crs=26391)

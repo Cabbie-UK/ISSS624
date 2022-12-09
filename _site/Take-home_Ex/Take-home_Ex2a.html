@@ -147,15 +147,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <ul class="dropdown-menu" aria-labelledby="nav-menu-hands-on-exercise">    
         <li>
     <a class="dropdown-item" href="../Hands-On_Ex/Hands-on_Ex1.html">
- <span class="dropdown-text">Hands-on Exercise 1</span></a>
+ <span class="dropdown-text">Hands-on Exercise 1 Geospatial Data Wrangling and Choropleth Mapping</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../Hands-On_Ex/Hands-on_Ex2.html">
- <span class="dropdown-text">Hands-on Exercise 2</span></a>
+ <span class="dropdown-text">Hands-on Exercise 2 Spatial Autocorrelation</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../Hands-On_Ex/Hands-on_Ex3.html">
- <span class="dropdown-text">Hands-on Exercise 3</span></a>
+ <span class="dropdown-text">Hands-on Exercise 3 Geographical Segmentation</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../Hands-On_Ex/Hands-on_Ex4.html">
+ <span class="dropdown-text">Hands-on Exercise 4 Geographically Weighted Regression</span></a>
   </li>  
     </ul>
   </li>
@@ -164,15 +168,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <ul class="dropdown-menu" aria-labelledby="nav-menu-in-class-exercise">    
         <li>
     <a class="dropdown-item" href="../In-Class_Ex/In-Class_Ex1.html">
- <span class="dropdown-text">In-class Exercise 1</span></a>
+ <span class="dropdown-text">In-class Exercise 1 Spatial Weights and Applications</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../In-Class_Ex/In-Class_Ex2.html">
- <span class="dropdown-text">In-class Exercise 2</span></a>
+ <span class="dropdown-text">In-class Exercise 2 Geospatial Data Import and Wrangling</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../Hands-On_Ex/Hands-on_Ex3.html">
- <span class="dropdown-text">In-class Exercise 3</span></a>
+ <span class="dropdown-text">In-class Exercise 3 Spatial Clustering using ClustGeo Mtd</span></a>
   </li>  
     </ul>
   </li>
@@ -181,11 +185,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <ul class="dropdown-menu" aria-labelledby="nav-menu-take-home-exercise">    
         <li>
     <a class="dropdown-item" href="../Take-home_Ex/Take-home_Ex1.html">
- <span class="dropdown-text">Take-home Execise 1</span></a>
+ <span class="dropdown-text">Take-home Execise 1 Geospatial Analytics for Social Good</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../Take-home_Ex/Take-home_Ex2a.html">
- <span class="dropdown-text">Take-home Execise 2a</span></a>
+ <span class="dropdown-text">Take-home Execise 2a Data Import and Wrangle for Take-home Ex 2</span></a>
   </li>  
     </ul>
   </li>
@@ -245,7 +249,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
-<p>First published on: 4-Dec-2022</p>
+<p>Updated on: 5-Dec-2022</p>
+<p>(First published on: 4-Dec-2022)</p>
 <section id="regionalisation-with-spatially-constrained-cluster-analysis" class="level1">
 <h1>Regionalisation with Spatially Constrained Cluster Analysis</h1>
 <section id="overview" class="level2">
@@ -306,12 +311,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ol>
 <p><img src="images/paste-6004C10D.png" class="img-fluid"></p>
 <ol start="2" type="1">
-<li>We use <code>st_sf()</code> to convert the tibble data frame into sf data frame.</li>
+<li>We use <code>st_sf()</code> to convert the tibble data frame into a sf data frame.</li>
 </ol>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>wp_sf <span class="ot">&lt;-</span> <span class="fu">st_sf</span>(wp_nga, <span class="at">crs=</span><span class="dv">4326</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>When the process completed, a new sf data frame called <em>wp_sf</em> will be created.</p>
+<p>When the process is completed, a new sf data frame called <em>wp_sf</em> will be created.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>wp_sf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -320,7 +325,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="niegeria-lga-level-boundary-data" class="level3">
 <h3 class="anchored" data-anchor-id="niegeria-lga-level-boundary-data">3.2 Niegeria LGA level boundary data</h3>
-<p>Shapefile downloaded from <a href="https://www.geoboundaries.org/">geoBoundaries</a> portal will imported in st_read of sf package.</p>
+<p>Shapefile downloaded from <a href="https://www.geoboundaries.org/">geoBoundaries</a> portal will be imported in st_read of sf package.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>nga <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"Take-Home_Ex2a/data"</span>,</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>               <span class="at">layer =</span> <span class="st">"geoBoundaries-NGA-ADM2"</span>,</span>
@@ -331,8 +336,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="point-in-polygon-overlay" class="level2">
 <h2 class="anchored" data-anchor-id="point-in-polygon-overlay">4 Point in Polygon Overlay</h2>
-<p>Although <em>wp_sf</em> sf data frame consists of a field called <em>#clean_adm2</em> which by right should provide the LGA name of the water point. However, it is always a good practice to be more caution when dealing with external data.</p>
-<p>In this section, we are going to use a geoprocessing function (or commonly know as GIS analysis) called <strong>point-in-polygon overlay</strong> to transfer the attribute information in <em>nga</em> sf data frame into <em>wp_sf</em> data frame.</p>
+<p>Although <em>wp_sf</em> sf data frame consists of a field called <em>#clean_adm2</em> which by right should provide the LGA name of the water point, it is always a good practice to be more cautious when dealing with external data.</p>
+<p>In this section, we are going to use a geoprocessing function (or commonly known as GIS analysis) called <strong>point-in-polygon overlay</strong> to transfer the attribute information in <em>nga</em> sf data frame into <em>wp_sf</em> data frame.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>wp_sf_joined <span class="ot">&lt;-</span> <span class="fu">st_join</span>(wp_sf, nga)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>

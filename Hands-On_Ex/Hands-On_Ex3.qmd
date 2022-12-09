@@ -7,7 +7,7 @@ execute:
   warning: false
 ---
 
-Updated on: 4-Dec-2022
+Updated on: 9-Dec-2022
 
 (First published on: 2-Dec-2022)
 
@@ -65,7 +65,7 @@ The R packages needed for this exercise are as follows:
 
 -   Choropleth mapping - tmap
 
--   Multivariate data visualisation and analysis - corrplot, ggpubr, and heatmaply
+-   Multivariate data visualisation and analysis - corrplot, ggpubr, GGally and heatmaply
 
 -   Cluster analysis - cluster, and ClustGeo
 
@@ -73,7 +73,7 @@ The code chunk below installs and launches these R packages into R environment.
 
 ```{r}
 pacman::p_load(rgdal, spdep, tmap, sf, 
-               ggpubr, cluster, factoextra, NbClust,
+               ggpubr, cluster, factoextra, NbClust, GGally,
                heatmaply, corrplot, psych, tidyverse, ClustGeo)
 ```
 
@@ -201,11 +201,11 @@ ggplot(data=ict_derived,
   ggtitle("Distribution of Radio Penetration Rate \n(Boxplot)")
 ```
 
-+----------------------------------------------------------------------------------------------------------------------------------------------+
-| *What can you observe from the distributions reveal in the histogram and boxplot?*                                                           |
-|                                                                                                                                              |
-| Reply: The distribution of the Radio Penetration Rate appears less skewed. From the boxplot, the number of outliers has reduced from 3 to 1. |
-+----------------------------------------------------------------------------------------------------------------------------------------------+
++---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| *What can you observe from the distributions reveal in the histogram and boxplot?*                                                                                                          |
+|                                                                                                                                                                                             |
+| Reply: The distribution of the Radio Penetration Rate appears less skewed than the distribution of households with radio. From the boxplot, the number of outliers has reduced from 3 to 1. |
++---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 In the next code chunk below, multiple histograms are plotted to reveal the distribution of the selected variables in the *ict_derived* data.frame.
 
@@ -780,7 +780,7 @@ plot.mst(shan.mst,
 title(main="Minimum Spanning Tree plot")
 ```
 
-### 5.8.5 Computing spatially constrained clusters using SKATER method
+### 5.8.5 Compute spatially constrained clusters using SKATER method
 
 The code chunk below computes the spatially constrained cluster using [*skater()*](https://r-spatial.github.io/spdep/reference/skater.html) of **spdep** package.
 
@@ -818,8 +818,6 @@ ccs6
 
 We can find out how many observations are in each cluster by means of the table command.
 
-We can also find this as the dimension of each vector in the lists contained in edges.groups. `For example, the first list has node with dimension 12, which is also the number of observations in the first cluster??.`
-
 ```{r}
 table(ccs6)
 ```
@@ -827,6 +825,7 @@ table(ccs6)
 Lastly, we can also plot the pruned tree that shows the six clusters on top of the townshop area.
 
 ```{r}
+#| warning: false
 plot(shan_sp, border=gray(.5))
 plot(clust6, 
      coordinates(shan_sp), 
@@ -857,6 +856,7 @@ qtm(shan_sf_spatialcluster, "SP_CLUSTER") +
 For easy comparison, it will be better to place both the hierarchical clustering and spatially constrained hierarchical clustering maps next to each other.
 
 ```{r}
+#| warning: false
 hclust.map <- qtm(shan_sf_cluster,
                   "CLUSTER") + 
   tm_borders(alpha = 0.5) +
@@ -904,7 +904,7 @@ groups <- as.factor(cutree(nongeo_cluster, k=6))
 ```
 
 ```{r}
-shan_sf_ngeo_cluster <- cbind(shan_sf, as.matrix(groups)) %>%
+shan_sf_ngeo_cluster <- cbind(shan_sf_joined, as.matrix(groups)) %>%
   rename(`CLUSTER` = `as.matrix.groups.`)
 ```
 
@@ -951,7 +951,7 @@ groups <- as.factor(cutree(clustG, k=6))
 We will then join back the group list with shan_sf polygon feature data frame by using the code chun below.
 
 ```{r}
-shan_sf_Gcluster <- cbind(shan_sf, as.matrix(groups)) %>%
+shan_sf_Gcluster <- cbind(shan_sf_joined, as.matrix(groups)) %>%
   rename(`CLUSTER` = `as.matrix.groups.`)
 ```
 
@@ -963,4 +963,71 @@ qtm(shan_sf_Gcluster, "CLUSTER")  +
   tm_layout(main.title = "ClustGeo Cluster Map \n(alpha = 0.3)",
             main.title.position = "center",
             main.title.size = 1.2) 
+```
+
+## 5.10 Visual Interpretation of Clusters
+
+### 5.10.1 Visualise individual clustering variable
+
+THe Code chunk below is used to check the distribution of the variable (i.e RADIO_PR) by cluster.
+
+```{r}
+ggplot(data = shan_sf_ngeo_cluster,
+       aes(x = CLUSTER, y = RADIO_PR)) +
+  geom_boxplot()+
+  stat_summary(geom = "point",
+               fun.y="mean",
+               colour ="red",
+               size=2) +
+  ggtitle("Distribution of RADIO_PR by Cluser")
+```
+
+The boxplot shows that Cluster 3 displays the highest mean (red dot) Radio Ownership Per Thousand Household. This is followed by Cluster 2, 1, 4, 5 and 6.
+
+### 5.10.2 Multivariate Visualisation
+
+Past studies shown that parallel coordinate plot can be used to reveal clustering variables by cluster very effectively. In the code chunk below, [`ggparcoord()`](https://ggobi.github.io/ggally/reference/ggparcoord.html) of [**GGally**](https://ggobi.github.io/ggally/) package.
+
+```{r}
+ggparcoord(data = shan_sf_ngeo_cluster, 
+           columns = c(25:30), 
+           scale = "globalminmax",
+           alphaLines = 0.2,
+           boxplot = TRUE, 
+           title = "Multiple Parallel Coordinates Plots of ICT Variables by Cluster") +
+  facet_grid(~ CLUSTER) + 
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+The parallel coordinate plot above shows that households in Cluster 4 townships tend to own the highest number of TV and mobile-phone. On the other hand, households in Cluster 5 tends to own the lowest of all the five ICT.
+
+Note that the `scale` argument of `ggparcoor()` provide several methods to scale the clustering variables. They are:
+
+-   std: univariately, subtract mean and divide by standard deviation.
+
+-   robust: univariately, subtract median and divide by median absolute deviation.
+
+-   uniminmax: univariately, scale so the minimum of the variable is zero, and the maximum is one.
+
+-   globalminmax: no scaling is done; the range of the graphs is defined by the global minimum and the global maximum.
+
+-   center: use uniminmax to standardize vertical height, then center each variable at a value specified by the scaleSummary param.
+
+-   centerObs: use uniminmax to standardize vertical height, then center each variable at the value of the observation specified by the centerObsID param
+
+There is no one best scaling method to use. We should explore them and select the one that best meet our analysis need.
+
+Last but not least, we can also compute the summary statistics such as mean, median, sd, etc to complement the visual interpretation.
+
+In the code chunk below, `group_by()` and `summarise()` of dplyr are used to derive mean values of the clustering variables.
+
+```{r}
+shan_sf_ngeo_cluster %>% 
+  st_set_geometry(NULL) %>%
+  group_by(CLUSTER) %>%
+  summarise(mean_RADIO_PR = mean(RADIO_PR),
+            mean_TV_PR = mean(TV_PR),
+            mean_LLPHONE_PR = mean(LLPHONE_PR),
+            mean_MPHONE_PR = mean(MPHONE_PR),
+            mean_COMPUTER_PR = mean(COMPUTER_PR))
 ```

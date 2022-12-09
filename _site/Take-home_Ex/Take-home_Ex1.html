@@ -148,15 +148,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <ul class="dropdown-menu" aria-labelledby="nav-menu-hands-on-exercise">    
         <li>
     <a class="dropdown-item" href="../Hands-On_Ex/Hands-on_Ex1.html">
- <span class="dropdown-text">Hands-on Exercise 1</span></a>
+ <span class="dropdown-text">Hands-on Exercise 1 Geospatial Data Wrangling and Choropelth Mapping</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../Hands-On_Ex/Hands-on_Ex2.html">
- <span class="dropdown-text">Hands-on Exercise 2</span></a>
+ <span class="dropdown-text">Hands-on Exercise 2 Spatial Autocorrelation</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../Hands-On_Ex/Hands-on_Ex3.html">
- <span class="dropdown-text">Hands-on Exercise 3</span></a>
+ <span class="dropdown-text">Hands-on Exercise 3 Geographical Segmentation</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../Hands-On_Ex/Hands-on_Ex4.html">
+ <span class="dropdown-text">Hands-on Exercise 4 Geographically weighted Regression</span></a>
   </li>  
     </ul>
   </li>
@@ -165,15 +169,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <ul class="dropdown-menu" aria-labelledby="nav-menu-in-class-exercise">    
         <li>
     <a class="dropdown-item" href="../In-Class_Ex/In-Class_Ex1.html">
- <span class="dropdown-text">In-class Exercise 1</span></a>
+ <span class="dropdown-text">In-class Exercise 1 Spatial Weights and Applications</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../In-Class_Ex/In-Class_Ex2.html">
- <span class="dropdown-text">In-class Exercise 2</span></a>
+ <span class="dropdown-text">In-class Exercise 2 Geospatial Data Import and Wrangling</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../Hands-On_Ex/Hands-on_Ex3.html">
- <span class="dropdown-text">In-class Exercise 3</span></a>
+ <span class="dropdown-text">In-class Exercise 3 Spatial Clustering using ClustGeo Mtd</span></a>
   </li>  
     </ul>
   </li>
@@ -182,11 +186,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <ul class="dropdown-menu" aria-labelledby="nav-menu-take-home-exercise">    
         <li>
     <a class="dropdown-item" href="../Take-home_Ex/Take-home_Ex1.html">
- <span class="dropdown-text">Take-home Execise 1</span></a>
+ <span class="dropdown-text">Take-home Execise 1 Geospatial Analytics for Social Good</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../Take-home_Ex/Take-home_Ex2a.html">
- <span class="dropdown-text">Take-home Execise 2a</span></a>
+ <span class="dropdown-text">Take-home Execise 2a Geospatial Data Import and Wrangling (2)</span></a>
   </li>  
     </ul>
   </li>
@@ -296,7 +300,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </header>
 
 <p><img src="images/paste-18F74B6F.png" class="img-fluid"></p>
-<p>First published on: 30-Nov-2022</p>
+<p>Updated on 6-Dec-2022</p>
+<p>(First published on: 30-Nov-2022)</p>
 <section id="geospatial-analytics-for-social-good" class="level1">
 <h1>Geospatial Analytics for Social Good</h1>
 <section id="overview" class="level2">
@@ -534,7 +539,7 @@ We do not transform the geographic data at this point as we will be using <code>
 <pre><code>[1] 0</code></pre>
 </div>
 </div>
-<p>This is no invalid geometries</p>
+<p>This is no invalid geometry</p>
 </section>
 <section id="missing-values" class="level3">
 <h3 class="anchored" data-anchor-id="missing-values">4.2 Missing values</h3>
@@ -626,7 +631,7 @@ GEOGCRS["WGS 84",
     ID["EPSG",4326]]</code></pre>
 </div>
 </div>
-<p>We note that the geometry information is reflected in under WGS 84, a Geographic Coordinate System (GCS) which uses a 3-dimensional spherical surface to define locations on the earth. For our study, we will transform the geometry to Projected Coordinate System which translates GCS data a 2-dimensional surface using <code>st_transform()</code> of the sf package. The Projected Coordinate Systems of Nigeria is EPSG: 26391.</p>
+<p>We note that the geometry information is reflected under WGS 84, a Geographic Coordinate System (GCS) which uses a 3-dimensional spherical surface to define locations on the earth. For our study, we will transform the geometry to Projected Coordinate System which translates GCS data into a 2-dimensional surface using <code>st_transform()</code> of the sf package. The Projected Coordinate Systems of Nigeria is EPSG: 26391.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>nga_wp_projected <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(nga_wp_processed, <span class="at">crs=</span><span class="dv">26391</span>)</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>

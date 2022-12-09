@@ -7,25 +7,27 @@ website:
     left: 
       - text: Hands-on Exercise
         menu: 
-          - text: Hands-on Exercise 1
+          - text: Hands-on Exercise 1 Geospatial Data Wrangling and Choropleth Mapping
             href: Hands-On_Ex/Hands-on_Ex1.qmd
-          - text: Hands-on Exercise 2
+          - text: Hands-on Exercise 2 Spatial Autocorrelation
             href: Hands-On_Ex/Hands-on_Ex2.qmd
-          - text: Hands-on Exercise 3
+          - text: Hands-on Exercise 3 Geographical Segmentation
             href: Hands-On_Ex/Hands-on_Ex3.qmd
+          - text: Hands-on Exercise 4 Geographically Weighted Regression
+            href: Hands-On_Ex/Hands-on_Ex4.qmd
       - text: In-class Exercise
         menu: 
-          - text: In-class Exercise 1
+          - text: In-class Exercise 1 Spatial Weights and Applications
             href: In-Class_Ex/In-Class_Ex1.qmd
-          - text: In-class Exercise 2
+          - text: In-class Exercise 2 Geospatial Data Import and Wrangling
             href: In-Class_Ex/In-Class_Ex2.qmd
-          - text: In-class Exercise 3
+          - text: In-class Exercise 3 Spatial Clustering using ClustGeo Mtd
             href: Hands-On_Ex/Hands-on_Ex3.qmd
       - text:  Take-home Exercise
         menu:
-          - text: Take-home Execise 1
+          - text: Take-home Execise 1 Geospatial Analytics for Social Good
             href: Take-home_Ex/Take-home_Ex1.qmd
-          - text: Take-home Execise 2a
+          - text: Take-home Execise 2a Data Import and Wrangle for Take-home Ex 2
             href: Take-home_Ex/Take-home_Ex2a.qmd
         
     right:
