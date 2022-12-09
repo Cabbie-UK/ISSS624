@@ -88,7 +88,6 @@ The code chunk used is shown below:
 ```{r}
 #| eval: true
 #| echo: true
-
 shan_sf <- st_read(dsn = "Hands-On_Ex3/data/geospatial", 
                    layer = "myanmar_township_boundaries") %>%
   filter(ST %in% c("Shan (East)", "Shan (North)", "Shan (South)"))
