@@ -6,7 +6,7 @@ editor: visual
 
 ![](images/paste-18F74B6F.png)
 
-Updated on 6-Dec-2022
+Updated on 9-Dec-2022
 
 (First published on: 30-Nov-2022)
 
@@ -16,7 +16,7 @@ Updated on 6-Dec-2022
 
 ### 1.1 Setting the Scene
 
-Water is an important resource to mankind. Clean and accessible water is critical to human health. It provides a healthy environment, a sustainable economy, reduces poverty and ensures peace and security. Yet over 40% of the global population does not have access to sufficient clean water. By 2025, 1.8 billion people will be living in countries or regions with absolute water scarcity, according to UN-Water. The lack of water poses a major threat to several sectors, including food security. Agriculture uses about 70% of the world's accessible freshwater.
+Water is an important resource to mankind. Clean and accessible water is critical to human health. It provides a healthy environment, a sustainable economy, reduces poverty and ensures peace and security. Yet over 40% of the global population does not have sufficient access to clean water. By 2025, 1.8 billion people will be living in countries or regions with absolute water scarcity, according to UN-Water. The lack of water poses a major threat to several sectors, including food security. Agriculture uses about 70% of the world's accessible freshwater.
 
 Developing countries are most affected by water shortages and poor water quality. Up to 80% of illnesses in the developing world are linked to inadequate water and sanitation. Despite technological advancement, providing clean water to the rural community is still a major development issue in many countries globally, especially in Africa.
 
@@ -30,25 +30,25 @@ In this study, we will apply appropriate global and local measures of spatial as
 
 ### 1.3 The Data
 
-Geospatia data
+Geospatial data
 
-For this assignment, 2 data sets will be used.
+For this assignment, 2 geospatial data sets will be used.
 
-1.  geo_export: It contains information on the water points in Nigeria. The data is available from [WPdx Global Data Repositories](https://www.waterpointdata.org/access-data/) and we are using the WPdx+ data set. The data is extracted in shapefile format.
+1.  geo_export: It contains information on the water points in Nigeria. The data is available from [WPdx Global Data Repositories](https://www.waterpointdata.org/access-data/) and we are using the WPdx+ data set. The data is extracted and downloaded in shapefile format.
 
     ![](images/paste-D25947E2.png){width="598"}
 
-2.  nga_lga2: The contains Nigeria Level-2 Administrative Boundary (also known as Local Government Area (LGA)) polygon features GIS data will be used. The data is downloaded from The [Humanitarian Data Exchange](https://data.humdata.org/) portal
+2.  nga_lga2: The file contains Nigeria Level-2 Administrative Boundary (also known as Local Government Area (LGA)) polygon features GIS data will be used. The data is downloaded from The [Humanitarian Data Exchange](https://data.humdata.org/) portal
 
 ### 1.4 The Tasks
 
 The specific tasks of this assignments are:
 
--   Using appropriate sf method, import the shapefiles into R and save it in a simple feature data frame format. The Projected Coordinate Systems of Nigeria, EPSG: 26391 is used
+-   Using appropriate sf method, import the shapefiles into R and save them in a simple feature data frame format. The Projected Coordinate Systems of Nigeria is EPSG: 26391.
 
--   Using appropriate tidyr and dplyr methods, derive the proportion of functional and non-functional water point at LGA level.
+-   Using appropriate tidyr and dplyr methods to derive the proportion of functional and non-functional water point at the LGA level.
 
--   Combining the geospatial data frames into a Simple Feature (`sf`) data frame.
+-   Combining the geospatial data frames into a Simple Feature (sf) data frame.
 
 -   Performing clusters and outliers analysis by using appropriate local measures of spatial association methods.
 
@@ -56,7 +56,7 @@ The specific tasks of this assignments are:
 
 ### 1.5 Thematic Mapping
 
--   Plot maps to show the spatial distribution of functional and non-functional water point rate at LGA level by using appropriate thematic mapping technique provided by tmap package.
+-   Plot maps to show the spatial distribution of functional and non-functional water point rate at LGA level by using appropriate thematic mapping technique provided by the tmap package.
 
 ### 1.6 Analytical Mapping
 
@@ -66,7 +66,7 @@ The specific tasks of this assignments are:
 
 ### 2.1 Import and load relevant packages into R environment
 
-The R packages we'll use for this analysis are:
+The R packages we use for this analysis are:
 
 -   **sf**: used for importing, managing, and processing geospatial data
 
@@ -84,7 +84,7 @@ The R packages we'll use for this analysis are:
 pacman::p_load(sf, tidyverse, tmap, spdep, funModeling, units)
 ```
 
-### 2.2 Import the Geospatial data sets
+### 2.2 Import the geospatial data sets
 
 #### 2.2.1 Import water point geospatial data
 
@@ -92,7 +92,6 @@ We import the geo_export shapefile using `st_read()` of sf library and use `filt
 
 ```{r}
 #| eval: false
-
 wp = st_read(dsn = "Take-home_Ex1/geodata",
               layer = "geo_export",
               crs = 4326) %>%
@@ -103,11 +102,10 @@ wp = st_read(dsn = "Take-home_Ex1/geodata",
 ## We do not transform the geographic data at this point as we will be using `st_intersects()` in a later step to process the data. This is because st_intersects() only works correctly if the geospatial data are in geographic coordinate system (i.e. wgs84)
 :::
 
-Next, `write_rds()` of readr package is used to save the extracted sf data table (i.e. wp) into an output file in rds data format. The output file is called *wp_nga.rds* and it is saved in *geodata* sub-folder.
+Next, `write_rds()` of readr package is used to save the extracted sf data table (i.e. *wp*) into an output file in rds data format. The output file is called *wp_nga.rds* and it is saved in *geodata* sub-folder.
 
 ```{r}
 #| eval: false
-
 write_rds(wp, "Take-home_Ex1/geodata/wp_nga.rds")
 ```
 
@@ -117,7 +115,6 @@ We use `st_read()` to import the LGA boundary data into sf data table
 
 ```{r}
 #| eval: false
-
 nga = st_read(dsn = "Take-home_Ex1/geodata",
                layer = "nga_lga2",
                crs = 4326)
@@ -127,13 +124,12 @@ nga = st_read(dsn = "Take-home_Ex1/geodata",
 
 ### 3.1 Recode the values in the status_cle column
 
-The status_cle column in the *wp_nga.rds* file indicates the status of the water point when it was last assessed.
+The *status_cle* column in the *wp_nga.rds* file indicates the status of the water point when it was last assessed.
 
-We do a count of the values in the status_cle column using `freq()` of the funModeling package.
+We do a count of the diferrent values in the *status_cle* column using `freq()` of the funModeling package.
 
 ```{r}
 #| eval: false
-
 wp_nga = read_rds("Take-home_Ex1/geodata/wp_nga.rds")
 
 freq(data=wp_nga,input = 'status_cle')
@@ -141,15 +137,14 @@ freq(data=wp_nga,input = 'status_cle')
 
 ![](images/paste-53B41B3C.png)
 
-Given that we are required to plot maps relating to the proportion of functional and non-functional water points in Nigeria, we need to first compute the total number of functional, non-functional and blank value (denoted by "NA") water points before we can derive the proportion of non-functional and functional water points.
+Given that we are going to plot maps relating to the proportion of functional and non-functional water points in Nigeria, we need to first compute the total number of functional, non-functional and blank value (denoted by "NA") water points before we can derive the proportion of non-functional and functional water points for each LGA.
 
 To do so, we perform the following steps:
 
--   We use the `replace_na()` method to recode all the *NA* values in status_cle column of the wp_nga data table into Unknown
+-   We use the `replace_na()` method to recode all the NA values in *status_cle* column of the *wp_nga* data table into Unknown
 
     ```{r}
     #| eval: false
-
     wp_nga = wp_nga %>%
       mutate(status_cle = replace_na(status_cle, "Unknown"))
     ```
@@ -158,7 +153,6 @@ To do so, we perform the following steps:
 
     ```{r}
     #| eval: false
-
     # Extract functional water points
     wpt_functional = wp_nga %>%
       filter(status_cle %in%
@@ -200,60 +194,62 @@ nga_wp = nga %>%
 
 ### 3.3 Save the data table for spatial analysis
 
-We derive two fields namely *pct_functional* and *pct_non-functional* using the `mutate()` of dplyr package. To keep the file size small, we use `select()` of dplyr is used to retain only columns 3,4,9,10, 18,19,20,21,22,and 23.
+We derive two fields namely *pct_functional* and *pct_non-functional* using the `mutate()` of dplyr package. To keep the file size small, we use `select()` of dplyr to retain only columns 3,4,9,10, 18,19,20,21,22,and 23.
 
 ```{r}
 #| eval: false
-
 nga_wp = nga_wp %>%
   mutate(pct_functional = `wpt functional`/`total wpt`) %>%
   mutate(`pct_non-functional` = `wpt non-functional`/`total wpt`) %>%
   select(3:4, 9:10, 18:23)
 ```
 
-Thereafter ,we save the tidied sf data table into rds format for our geospatial analysis
+Thereafter ,we save the updated *nga_wp* sf data table into rds format for our geospatial analysis
 
 ```{r}
 #| eval: false
-
 write_rds(nga_wp, "Take-home_Ex1/geodata/nga_wp.rds")
 ```
 
-### 3.4 Visualise the spatial distribution of water points
+### 3.4 Visualise the geographic distribution of water points
+
+We first load the *nga_wp* sf.data frame in the R environment.
 
 ```{r}
-#| fig-width: 14
-#| fig-height: 12
 
 # Load the nga_wp sf data file prepare in the previous steps
 nga_wp <- read_rds("Take-home_Ex1/geodata/nga_wp.rds")
+```
 
+Next, the plot the choropleth by the status of the water points.
+
+```{r fig.width=14, fig.height=12}
 # Plot the various types of water points
 total = qtm(nga_wp, "total wpt") + 
         tm_layout(main.title = "Total no. of \nwater points",
                   main.title.position = "center",
-                  main.title.size = 1.0,
+                  main.title.size = 1.5,
                   legend.height = 0.26,
                   legend.width = 0.40) 
 
 wp_functional = qtm(nga_wp, "wpt functional") + 
                 tm_layout(main.title = "Total no. of functional \nwater points",
                   main.title.position = "center",
-                  main.title.size = 1.0,
+                  main.title.size = 1.5,
                   legend.height = 0.26,
                   legend.width = 0.40) 
 
 wp_nonfunctional = qtm(nga_wp, "wpt non-functional") + 
                 tm_layout(main.title = "Total no. of non-functional \nwater points",
                   main.title.position = "center",
-                  main.title.size = 1.0,
+                  main.title.size = 1.5,
                   legend.height = 0.26,
                   legend.width = 0.40)
 
 unknown <- qtm(nga_wp, "wpt unknown") + 
                 tm_layout(main.title = "Total no. of  water points \nwith unknown status",
                   main.title.position = "center",
-                  main.title.size = 1.0,
+                  main.title.size = 1.5,
                   legend.height = 0.26,
                   legend.width = 0.40)
 
@@ -262,15 +258,15 @@ tmap_arrange(total, wp_functional, wp_nonfunctional, unknown, ncol=2)
 
 ## 4 Data Processing
 
-Before we start working on our data, we first check for and address the following to ensure that they do not affect subsequent computations and representations
+Before we start working on our data, we first check for and address the following to ensure that they do not affect subsequent computations in our analysis:
 
 -   Invalid geometries
 
 -   missing values
 
-### 4.1 Invalid geometires
+### 4.1 Invalid geometries
 
-We use the `st_is_valid()` function from sf package to check whether the geometries in nga_wp are valid. We wrap the `st_is_valid()` using `length()` function to count the number of invalid geometries returned.
+We use the `st_is_valid()` function from sf package to check whether the geometries in *nga_wp* are valid. We wrap the `st_is_valid()` using `length()` function to count the number of invalid geometries returned.
 
 ```{r}
 length(which(st_is_valid(nga_wp) == FALSE))
@@ -280,13 +276,13 @@ This is no invalid geometry
 
 ### 4.2 Missing values
 
-We use the following code chunk to check every row in the nga_wp sf data table to see if there are NA values. If so, to return these records.
+We use the following code chunk to check every row in the *nga_wp* sf data table to see if there is any NA value. If so, to return these records.
 
 ```{r}
 nga_wp[rowSums(is.na(nga_wp))!=0,]
 ```
 
-The results show that there are 13 records with missing values, primarily in the pct_functional and pct_non-functional columns. The 13 LGAs have no water point record at all and this resulted in a divisional error (and generating a NaN value) when we compute the the proportion of functional and non-functional water points.
+The results show that there are 13 records with missing values, primarily in the *pct_functional* and *pct_non-functional* columns. The 13 LGAs have no water point record at all and this resulted in a divisional error (and generating a NaN value) when we compute the percentage of functional and non-functional water points.
 
 We will remove these 13 records with missing values to avoid any unintended computational issue in our analysis downstream with the following code chunk.
 
@@ -296,20 +292,19 @@ nga_wp_processed <- na.omit(nga_wp,c("pct_non-functional"))
 
 ### 4.3 Transform coordinate system
 
-We first check the coordinate system of nga_wp_processed using `st_crs()` of the sf package.
+We first check the coordinate system of *nga_wp_processed* using `st_crs()` of the sf package.
 
 ```{r}
 st_crs(nga_wp_processed)
 ```
 
-We note that the geometry information is reflected under WGS 84, a Geographic Coordinate System (GCS) which uses a 3-dimensional spherical surface to define locations on the earth. For our study, we will transform the geometry to Projected Coordinate System which translates GCS data into a 2-dimensional surface using `st_transform()` of the sf package. The Projected Coordinate Systems of Nigeria is EPSG: 26391.
+We note that the geometry information is reflected under WGS 84, a Geographic Coordinate System (GCS) which uses a 3-dimensional spherical surface to define locations on the earth. For our study, we will transform the geometry to Projected Coordinate System. This translates GCS data into a 2-dimensional surface using `st_transform()` of the sf package. The Projected Coordinate Systems of Nigeria is EPSG: 26391.
 
 ```{r}
 nga_wp_projected <- st_transform(nga_wp_processed, crs=26391)
 
 # check to ascertain if the CRS is correctly projected
 st_crs(nga_wp_projected)
-
 ```
 
 ### 4.4 Checking the distribution of the attribute
@@ -334,11 +329,11 @@ ggplot(data=nga_wp_projected, aes(x= as.numeric(`pct_functional`)))+
   labs(y='Frequency',x="% of functional water points", title = "Distribution of % of functional water points")
 ```
 
-The distribution of the proportion of functional water points is slightly skewed.
+The distribution of the proportion of functional water points is slightly skewed as well.
 
 ### 4.5 Visualise the processed data
 
-We have completed the standard pre-processing steps and let us visualise the data with the following code chuck. We use the jenks method to classify the data points as it optimises class variances to determine the best arrangement off values into different classes
+We have completed the standard pre-processing steps and let us visualise the water data on the map with the following code chuck. We use the jenks method to classify the data points as it optimises class variances to determine the best arrangement off values into different classes
 
 [To visualise the proportion of non-functional water points over Nigera]{.underline}
 
@@ -354,7 +349,7 @@ tm_shape(nga_wp_projected) +
             main.title.size = 1.2)
 ```
 
-We will can roughly spot that the western part (especially in the south-western region) of the country has relatively more non-functional points, we cannot be sure if the faulty points are clustered around certain regions.
+We will can roughly spot that the western part (especially in the south-west region) of the country has relatively more non-functional points.
 
 [To visualise the proportion of functional water points over Nigera]{.underline}
 
@@ -370,9 +365,11 @@ tm_shape(nga_wp_projected) +
             main.title.size = 1.2)
 ```
 
+From the map above, we see that north east and north west of Nigeria have higher proportion of functional water points.
+
 ## 5 Global Spatial Autocorrelation
 
-We start off by first examining if there is global spatial autocorrelation among LGAs with non-functional water points, which is the objective of our study, using the following hypothesis:
+We start by first examining if there is global spatial autocorrelation among LGAs with non-functional water points, which is the objective of our study, using the following hypothesis:
 
 H0: The distribution of non-functional water points is a random phenomenon
 
@@ -380,7 +377,7 @@ H1: The distribution of non-functional water points is spatially dependent
 
 We set the level of significance, α at 0.05.
 
-### 5.1 Select the appropriate Contiguity Spatial Weight for our analysis
+### 5.1 Select the appropriate Spatial Weight for our analysis
 
 There are 2 main criterion for defining spatial weights:
 
@@ -388,11 +385,11 @@ There are 2 main criterion for defining spatial weights:
 
 -   Distance criterion:
 
-    -   Fixed distance
+    -   Fixed Distance
 
     -   Adaptive Distance
 
-Given that we have removed 13 LGAs with missing values from the data table, applying the contiguity criterion for spatial weights may not be ideal as we have suppressed the number of connections among contiguous LGAs. We generate the Queen contiguity weight matrix using `poly2nd()` of spdep package below and note that the number of neighbors for the LGAs range from 1 to 14, which is not very consistent.
+Given that we have removed 13 LGAs with missing values from the data table, applying the Contiguity criterion for spatial weights may not be ideal as we have suppressed the number of connections among contiguous LGAs. We generate the Neighbour List with Queen contiguity approach using `poly2nd()` of spdep package below and note that the number of neighbors for the LGAs range from 1 to 14, which is not very consistent.
 
 ```{r}
 wm_q = poly2nb(nga_wp_projected,queen=TRUE)
@@ -400,9 +397,9 @@ wm_q = poly2nb(nga_wp_projected,queen=TRUE)
 summary(wm_q)
 ```
 
-To overcome the reservations we have on using the contiguity criterion to determine the spatial weights, one way is to use distance-based criterion and there are 2 schemes available - Fixed Distance and Adaptive Distance
+To overcome the reservations we have on using the Contiguity criterion to determine the spatial weights, one way is to use distance-based criterion and there are 2 schemes available - Fixed Distance and Adaptive Distance
 
-For Fixed Distance scheme, while we can make use of `dnearneigh()` function of spdep package to compute the distance weight matrix distance where all LGAs have at least 1 neighbor, the LGA polygons are of very different sizes and therefore we may generate excessive/limited number of neighbors for some LGAs by using a fixed distance. For instance, bigger regions at the boundaries of the map tend to have fewer neighbors and hence less likely to obtain statistically significant results. To get a sense of how different the LGAs are in terms of land size, we plot the following histogram on the area of the LGAs using `st_area()` of sf package.
+For Fixed Distance scheme, while we can make use of `dnearneigh()` function of spdep package to compute the distance weight matrix distance where all LGAs have at least 1 neighbor, the LGA polygons are of very different sizes and therefore we may generate excessive/limited number of neighbors for some LGAs by using a fixed distance. For instance, bigger regions at the boundaries of the map tend to have fewer neighbors and hence are less likely to obtain statistically significant results. To get a sense of how different the LGAs are in terms of land size, we plot the following histogram on the area of the LGAs using `st_area()` of sf package.
 
 ```{r}
 options(scipen=999)
@@ -423,11 +420,11 @@ We also print out the relevant area statistics to show the wide range in land ar
 summary(st_area(nga_wp_projected))
 ```
 
-A solution to the concerns for the contiguity and fixed distance criterion is to adopt the Adaptive Distance scheme where we preset a fixed number of k neighbors per LGA. All LGAs are hence connected by the same number of numbers.
+A solution to the concerns for the Contiguity and Fixed Distance criterion is to adopt the Adaptive Distance scheme where we preset a fixed number of k neighbors per LGA. All LGAs are hence connected by the same number of neighbours.
 
-For this study, we will set k = 8 to strike a balance between not having too high a k value (which may have a smoothening out effect on the values) and being able to obtain statistically-sound results eventually. Setting k = 8 also takes into account that the distribution of the proportion non-functional water points is skewed as seen in Section 4.4.
+Based on the discussion above, [we will use Adaptive Distance weight matrix and set k = 8 for our subsequent analysis]{.underline} to strike a balance between not having too high a k value (which may have a smoothening out effect on the values) and being able to obtain statistically-sound results eventually. Setting k = 8 also takes into account that the distribution of the proportion non-functional water points is skewed as seen in Section 4.4.
 
-### 5.2 Compute the adaptive distance weight matrix
+### 5.2 Compute the Adaptive Distance weight matrix
 
 #### 5.2.1 Derive the centroid of every LGA
 
@@ -439,7 +436,7 @@ To get the longitude values of the centroids, we map the `st_centroid()` functio
 longitude <- map_dbl(nga_wp_projected$geometry, ~st_centroid(.x)[[1]])
 ```
 
-We do the same for latitude but access the second value per each centroid with \[\[2\]\].
+We do the same for latitude but access the second value of each centroid with \[\[2\]\].
 
 ```{r}
 latitude <- map_dbl(nga_wp_projected$geometry, ~st_centroid(.x)[[2]])
@@ -455,20 +452,20 @@ coords = cbind(longitude,latitude)
 head(coords)
 ```
 
-The first 6 sets of centroid coordinates appears fine.
+The first 6 sets of centroid coordinates appear fine.
 
-#### 5.2.2 Derive the neighbor list
+#### 5.2.2 Derive the Neighbor List
 
-We use the `knearneigh()` of spdep package to obtain the neighbor list (nb) object for the LGAs, setting k = 8
+Next. we use the `knearneigh()` of spdep package to obtain the Neighbor List (nb) object for the LGAs, setting k = 8
 
 ```{r}
 knn8 <- knn2nb(knearneigh(coords, k=8))
 knn8
 ```
 
-#### 5.2.3 Convert the neighbor list object into a spatial weights object
+#### 5.2.3 Convert the Neighbor List object into a Spatial Weights object
 
-Next, we use the `nb2listw()` of spdep package to convert the neighbor list into a spatial weights object.
+Finally, we use the `nb2listw()` of spdep package to convert the Neighbor List into a Spatial Weights object.
 
 ```{r}
 knn8_lw <- nb2listw(knn8, style = 'B')
@@ -478,7 +475,7 @@ summary(knn8_lw)
 
 ```
 
-### 5.3 Run the Moran's I test
+### 5.3 Run the Moran's I test for Global Autocorrelation
 
 We perform the Moran's I statistical testing using `moran.test()` of spdep package. The Moran's I test measures how the proportions of non-functional water points differ in the study area as a whole.
 
@@ -490,9 +487,9 @@ moran.test(nga_wp_projected$`pct_non-functional`,
 
 The p-value is \<0.05 implying that we can reject the null hypothesis and conclude that the spatial distribution of non-functional water points is not a random phenomenon. The positive Moran's I statistic of 0.450 indicates that there's some some degree of clustering of non-functional water points in our study area.
 
-### 5.4 Run the Geary's C test
+### 5.4 Run the Geary's C test for Global Autocorrelation
 
-We perform the Geary's C statistical testing using `geary.test()` of spdep package. The Geary's C test measures how the proportion of the LGA non-functional water points differ from their neighbors.
+To confirm that there is global clustering of non-functional water points, we perform the Geary's C statistical test using `geary.test()` of spdep package. The Geary's C test measures how the proportion of the non-functional water points in LGAs differ from their neighbors.
 
 ```{r}
 geary.test(nga_wp_projected$`pct_non-functional`, 
@@ -500,7 +497,9 @@ geary.test(nga_wp_projected$`pct_non-functional`,
            zero.policy = TRUE)
 ```
 
-The Geary's C statistic is between 0 and 1, indicating that there is global clustering and the proportion of non-functional water points between the LGAs and their neighbors tend to be similar in some regions of Nigeria. The p-value is \<0.05 implying that the result is statistically significant and we conclude that the spatial distribution of non-functional water points is not a random phenomenon.
+The Geary's C statistic is between 0 and 1, indicating that there is global clustering and the proportion of non-functional water points between the LGAs and their neighbors tend to be similar in some regions of Nigeria. The p-value is \<0.05 implying that the result is statistically significant.
+
+From the Moran's I and Geary's G tests, we conclude that the spatial distribution of non-functional water points is not a random phenomenon and there is indeed clustering of faulty water points.
 
 ## 6 Cluster and Outlier Analysis
 
@@ -508,7 +507,7 @@ In this section, we compute the Local Indicators of Spatial Association ("LISA")
 
 ### 6.1 Compute the local Moran's I
 
-The Local Moran's I statistic is relatively similar to the Global Moran's I in that it is providing a measure of how similar locations are to their neighbors. However, the difference is that each LGA receive its own I value, as well as its own variance, z value, expected I, and variance of I
+The Local Moran's I statistic is relatively similar to the Global Moran's I in that it is providing a measure of how similar locations are to their neighbors. However, the difference is that each LGA receive its own Moran's I value, as well as its own variance, z value, expected I, and variance of I
 
 We use the `localmoran()` of spdep package to compute the local Moran's I for non-functional water points.
 
@@ -521,7 +520,7 @@ head(localMI)
 
 The column on the far right provides the p-values. We can relate these p-values to different confidence levels (e.g. 99%, 95%, etc.) in order to draw a conclusion about the spatial distribution of non-functional water points across the LGAs.
 
-For ease of subsequent analysis, we create a sf data table by appending the local Moran's I dataframe (i.e. localMI) onto nga_wp_projected data table. At the same time, we rename the p-value column for the local Moran's I to "Pr.li".
+For ease of subsequent analysis, we create a sf data table by appending the local Moran's I dataframe (i.e. localMI) onto *nga_wp_projected* data table. At the same time, we rename the p-value column for the local Moran's I to "Pr.li".
 
 ```{r}
 nga_wp_projected.localMI <- cbind(nga_wp_projected,localMI) %>%
@@ -539,7 +538,7 @@ Using choropleth mapping functions of **tmap** package, we plot 2 maps:
 [For non-functional water-points]{.underline}
 
 ```{r}
-
+#| warning: false
 # 1. Map 1 representing the Local Moran's I values
 
 localMI.map <- tm_shape(nga_wp_projected.localMI) +
@@ -576,6 +575,7 @@ tmap_arrange(localMI.map, pvalue.map, asp=1, ncol=2)
 Similarly, we map the local Moran I statistics for functional water points by repeating the steps in Sections 6.1 and 6.2
 
 ```{r}
+#| warning: false
 # Generate the local Moran's I
 localMI_func <- localmoran(nga_wp_projected$`pct_functional`, knn8_lw)
 
@@ -667,7 +667,7 @@ quadrant[localMI[,5]>signif] <- 0
 
 Using choropleth mapping functions of tmap package, we plot 2 additional maps:
 
--   Map 3 representing the Proportion of non-functional water points
+-   Map 3 representing the proportion of non-functional water points
 -   Map 4 representing the LISA map of spatial clusters
 
 ```{r}
@@ -766,11 +766,11 @@ tmap_arrange(functional_wp, LISAmap_func,
 
 Our discussion below will be based on non-functional water points which is the objective of our study.
 
-Map 3 shows the regions with higher proportions of non-function water points were spread throughout the western part of Nigeria, especially in the south-west region. The Global Moran's I and Geary's C computed in sections 4.3.1 and 4.3.2 respectively confirmed that there's some degree of clustering of non-functional water points in Nigeria. So this begs the question of where do the clusters of non-functional water points lie. In terms of efforts to review, inspect and repair these faulty water points, it would be more cost effective if we can identify where they are congregated to manage them as a group/cluster.
+Map 3 shows the regions with higher proportion of non-function water points were mainly spread throughout the western part of Nigeria, especially in the south-west region. The Global Moran's I and Geary's C computed in sections 4.3.1 and 4.3.2 respectively confirmed that there's some degree of gloabal clustering of non-functional water points in Nigeria. So this begs the question of where do the clusters of non-functional water points lie. In terms of efforts to review, inspect and repair these faulty water points, it would be more cost effective if we can identify where they are congregated to manage them as a cluster.
 
-Maps 1 and 2, which indicate the local Moran's I values and p-values indicate that significant clusters appear in the north-east and south-west of the country.
+Based on the local Moran's I values (Map 1) and p-values (Map 2), we observe that significant clusters appear in the north-east and south-west of the country.
 
-The LISA map (Map 4) makes it easier by highlighting the 4 separate high-high clusters (labelled in the enlarged LISA map below) and, attention should be placed on Clusters 1 and 2 given the wider spread of non-functional water points and larger number of LGAs affected.
+The LISA map (Map 4) makes it easier for us by highlighting the 4 separate high-high clusters (labelled in the enlarged LISA map below) and, attention should be placed on Clusters 1 and 2 given the wider spread of non-functional water points and larger number of LGAs affected.
 
 ![](images/paste-8891987B.png){fig-align="center" width="536"}
 
@@ -788,11 +788,11 @@ The analysis consists of three steps:
 
 -   Map Gi statistics
 
-We have accomplished Step 1 in Section 4.2 when we derived the adaptive distance weight matrix. Therefore we go next compute the Gi statistics
+We have accomplished Step 1 in Section 4.2 when we have already derived the Adaptive Distance Weight Matrix. Therefore we will next compute the Gi statistics
 
 ### 7.1 Compute Gi statistics using adaptive distance weight matrix
 
-We use the `localG()` of spdep package to drive the local GI statistics and then create a sf data table by appending the local Gi statistics onto nga_wp_projected data table. At the same time, we rename the Gi statistics column to gstat_adaptive.
+We use the `localG()` of spdep package to derive the local GI statistics and then create a sf data table by appending the local Gi statistics onto *nga_wp_projected* data table. At the same time, we rename the Gi statistics column to *gstat_adaptive*.
 
 [For non-functional water-points]{.underline}
 
@@ -808,7 +808,7 @@ nga_wp_projected.gi <- cbind(nga_wp_projected, as.matrix(gi.adaptive)) %>%
 
 ### 7.2 Mark the Gi statistics that are significant
 
-The `localG()` function returns a Z-value and we will check this against the critical value setting the level of significance at 0.05. Based on the documentation for [locaG() function,](https://r-spatial.github.io/spdep/reference/localG.html) the critical values of the statistic under assumptions given in the references for the 95th percentile are for n=1: 1.645, n=50: 3.083, n=100: 3.289, n=1000: 3.886. For our analysis, we will use the more stringent critical value of 3.886 to define statistical significance. We will create an indicator column in the nga_wp_projected.gi data table for Gi statistics that are significant.
+The `localG()` function returns a Z-value and we will check this against the critical value setting the level of significance at 0.05. Based on the documentation for [locaG() function,](https://r-spatial.github.io/spdep/reference/localG.html) the critical values of the statistic under assumptions given in the references for the 95th percentile are for n=1: 1.645, n=50: 3.083, n=100: 3.289, n=1000: 3.886. For our analysis, we will use the more stringent critical value of 3.886 to define statistical significance. We will create an indicator column in the *nga_wp_projected.gi* data table for Gi statistics that are significant.
 
 [For non-functional water-points]{.underline}
 
@@ -914,15 +914,15 @@ Based on Maps 5 and 6, there are 3 regions of hot-spots and 2 regions of cold-sp
 
 ![](images/paste-865A0B27.png){fig-align="center" width="421"}
 
-In terms of planning and management of repairs, priority can be given to these 3 hot-spot regions given that the proportional of non-functional water points are relative to their neighbors. It is also worth noting that all 3 hot-spots regions are within high-high clusters under the LISA map.
+In terms of planning and management of repairs, priority can be given to these 3 hot-spot regions (labelled in red octagons) given that the proportional of non-functional water points are relative to their neighbors. It is also worth noting that all 3 hot-spots regions are within high-high clusters under the LISA map.
 
-For the 2 cold-spot regions, it would be interesting to see if there is any factor which influence the lower proportion of faulty water points and consider if they are relevant to prevent the water point malfunctioning at other LGAs, especially those in the high-high clusters or hot-spot regions.
+For the 2 cold-spot regions (labelled in blue octagons), it would be interesting to see if there are any factors which influence the lower proportion of faulty water points and consider if they are relevant to prevent the water point malfunctioning at other LGAs, especially those in the high-high clusters or hot-spot regions.
 
 ## 8 Conclusion
 
 As illustrated by this case study, geospatial autocorrelation analysis can help water point policy makers, maintenance teams to identify clusters and hot-spots for non-functional water points, plan for and priortise the repairs. On the other hand, a further examination of the outliers and cold-spots could offer insights on how water point failures can be avoided to provide clean and adequate water supply to improve the lives of the people in Nigeria.
 
-Geospatial analytics is indeed a useful tool to help organisations and entities optimise the use of their limited resources and make informed decisions that are data driven.
+Geospatial analytics can indeed be a useful tool to help organisations and entities optimise the use of their limited resources and make informed decisions that are data driven.
 
 ![](images/paste-6624F32E.png){width="1237"}
 
