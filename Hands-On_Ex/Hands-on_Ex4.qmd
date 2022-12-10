@@ -6,7 +6,9 @@ execute:
   warning: false
 ---
 
-First published on: 9-Dec-2022
+Updated on 10-Dec-2022
+
+(First published on: 9-Dec-2022)
 
 # 6 Calibrate Hedonic Pricing Model for Private Highrise Property with GWR Method
 
@@ -24,7 +26,7 @@ Two data sets will be used in this model building exercise, they are:
 
 ## 6.3 Getting Started
 
-Before we get started, it is important for us to install the necessary R packages into R and launch these R packages into R environment.
+Before we get started, it is important for us to install the necessary R packages and launch these R packages into R environment.
 
 The R packages needed for this exercise are as follows:
 
@@ -763,6 +765,42 @@ for (region in planning_region){
             main.title.size = 1.0)
   )
   }
+```
+
+### 6.9.6 Visualise coefficient estimates
+
+The code chunks below is used to create an interactive point symbol map.
+
+```{r}
+# Switch to interactive plot
+tmap_mode("view")
+
+# Plot the coefficient estimates
+AREA_SQM_SE <- tm_shape(mpsz_svy21)+
+  tm_polygons(alpha = 0.1) +
+tm_shape(condo_resale.sf.adaptive) +  
+  tm_dots(col = "AREA_SQM_SE",
+          border.col = "gray60",
+          border.lwd = 1) +
+  tm_view(set.zoom.limits = c(11,14))
+
+AREA_SQM_TV <- tm_shape(mpsz_svy21)+
+  tm_polygons(alpha = 0.1) +
+tm_shape(condo_resale.sf.adaptive) +  
+  tm_dots(col = "AREA_SQM_TV",
+          border.col = "gray60",
+          border.lwd = 1) +
+  tm_view(set.zoom.limits = c(11,14))
+
+tmap_arrange(AREA_SQM_SE, AREA_SQM_TV, 
+             asp=1, ncol=1, nrow = 2,
+             sync = TRUE)
+```
+
+Switch back to view mode
+
+```{r}
+tmap_mode("plot")
 ```
 
 ## 6.10 Reference
