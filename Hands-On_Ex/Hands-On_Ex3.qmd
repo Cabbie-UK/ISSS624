@@ -7,7 +7,7 @@ execute:
   warning: false
 ---
 
-Updated on: 9-Dec-2022
+Updated on: 13-Dec-2022
 
 (First published on: 2-Dec-2022)
 
@@ -90,7 +90,8 @@ The code chunk used is shown below:
 #| echo: true
 shan_sf <- st_read(dsn = "Hands-On_Ex3/data/geospatial", 
                    layer = "myanmar_township_boundaries") %>%
-  filter(ST %in% c("Shan (East)", "Shan (North)", "Shan (South)"))
+  filter(ST %in% c("Shan (East)", "Shan (North)", "Shan (South)")) %>%
+  select(c(2:7))
 ```
 
 The imported township boundary object is called *shan_sf*. It is saved in simple feature data.frame format. We can view the content of the newly created *shan_sf* simple features data.frame by using the code chunk below.
@@ -323,7 +324,7 @@ tmap_arrange(TT_HOUSEHOLDS.map, RADIO.map,
 
 Notice that the choropleth maps above clearly show that townships with relatively larger number of households are also showing relatively higher number of radio ownership.
 
-Now let us plot the choropleth maps showing the dsitribution of Number of households with radios and Radio penetration rate by using the code chunk below.
+Now let us plot the choropleth maps showing the distribution of Number of households with radios and Radio penetration rate by using the code chunk below.
 
 ```{r}
 tm_shape(shan_sf_joined) +
@@ -468,9 +469,45 @@ ggarrange(r, s, z,
           nrow = 1)
 ```
 
-Notice that the overall distribution of the clustering variables will change after the data standardisation. Hence, it is advisible **NOT** to perform data standardisation if the values range of the clustering variables are not very large.
+Notice that the overall distribution of the clustering variables will change after the data standardisation.
 
-### 5.7.3 Computing proximity matrix
++----------------------------------------------------------------------------------------------+
+| *What statistical conclusion can you draw from the histograms above?*                        |
+|                                                                                              |
+| Reply: Standardising the effect of making the distribution of the variable more symmetrical. |
++----------------------------------------------------------------------------------------------+
+
+However, it is advisable **NOT** to perform data standardisation if the value range of the clustering variables are not vastly different
+
+We can plot the density curve using the following code chunk.
+
+```{r}
+r <- ggplot(data=ict_derived, 
+             aes(x= `RADIO_PR`)) +
+  geom_density(color="black",
+               fill="light blue") +
+  ggtitle("Raw values without \nstandardisation")
+
+shan_ict_s_df <- as.data.frame(shan_ict.std)
+s <- ggplot(data=shan_ict_s_df, 
+       aes(x=`RADIO_PR`)) +
+  geom_density(color="black",
+               fill="light blue") +
+  ggtitle("Min-Max \nStandardisation")
+
+shan_ict_z_df <- as.data.frame(shan_ict.z)
+z <- ggplot(data=shan_ict_z_df, 
+       aes(x=`RADIO_PR`)) +
+  geom_density(color="black",
+               fill="light blue") +
+  ggtitle("Z-score \nStandardisation")
+
+ggarrange(r, s, z,
+          ncol = 3,
+          nrow = 1)
+```
+
+### 5.7.3 Compute proximity matrix
 
 In R, many packages provide functions to calculate distance matrix. We will compute the proximity matrix by using [*dist()*](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/dist.html) of R.
 
@@ -878,6 +915,16 @@ tmap_arrange(hclust.map, shclust.map,
 
 In this section, you will gain hands-on experience on using functions provided by **ClustGeo** package to perform non-spatially constrained hierarchical cluster analysis and spatially constrained cluster analysis.
 
++---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| A note on ClustGeo Package                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
++=============================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================+
+| [**ClustGeo**](https://cran.r-project.org/web/packages/ClustGeo/) package is an R package specially designed to support the need of performing spatially constrained cluster analysis. More specifically, it provides a Ward-like hierarchical clustering algorithm called `hclustgeo()` including spatial/geographical constraints.                                                                                                                                                                                                                                                        |
+|                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| In the nutshell, the algorithm uses two dissimilarity matrices D0 and D1 along with a mixing parameter alpha, whereby the value of alpha must be a real number between \[0, 1\]. D0 can be non-Euclidean and the weights of the observations can be non-uniform. It gives the dissimilarities in the **attribute/clustering variable space**. D1, on the other hand, gives the dissimilarities in the **constraint space**. The criterion minimised at each stage is a convex combination of the homogeneity criterion calculated with D0 and the homogeneity criterion calculated with D1. |
+|                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| The idea is then to determine a value of alpha which increases the spatial contiguity without deteriorating too much the quality of the solution based on the variables of interest. This need is supported by a function called `choicealpha()`.                                                                                                                                                                                                                                                                                                                                           |
++---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
 ### 5.9.1 Ward-like hierarchical clustering: ClustGeo
 
 ClustGeo package provides function called `hclustgeo()` to perform a typical Ward-like hierarchical clustering just like `hclust()` you learned in previous section. This [only works]{.underline} with the Ward method.
@@ -989,7 +1036,7 @@ Past studies shown that parallel coordinate plot can be used to reveal clusterin
 
 ```{r}
 ggparcoord(data = shan_sf_ngeo_cluster, 
-           columns = c(25:30), 
+           columns = c(17:21), 
            scale = "globalminmax",
            alphaLines = 0.2,
            boxplot = TRUE, 
