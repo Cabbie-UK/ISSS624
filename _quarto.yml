@@ -31,11 +31,13 @@ website:
             href: Take-home_Ex/Take-home_Ex1.qmd
           - text: Take-home Execise 2a Data Import and Wrangle for Take-home Ex 2
             href: Take-home_Ex/Take-home_Ex2a.qmd
+          - text: Take-home Execise 2 Regionalise Nigeria with water points and spatial features
+            href: Take-home_Ex/Take-home_Ex2.qmd
         
     right:
       - href: index.qmd
         text: Home
-      - about.qmd
+     
 
 format:
   html:
