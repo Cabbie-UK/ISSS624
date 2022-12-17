@@ -23,8 +23,10 @@ website:
             href: In-Class_Ex/In-Class_Ex2.qmd
           - text: In-class Exercise 3 Spatial Clustering using ClustGeo Mtd
             href: Hands-On_Ex/Hands-on_Ex3.qmd
-          - text: In-class Exercise 4 Geographically Weighted Regression (with notes)
+          - text: In-class Exercise 4 Geographically Weighted Linear Regression (with notes)
             href: In-Class_Ex/In-Class_Ex4.qmd
+          - text: In-class Exercise 5 Geographically Weighted Logistic Regression
+            href: In-Class_Ex/In-Class_Ex5.qmd
       - text:  Take-home Exercise
         menu:
           - text: Take-home Execise 1 Geospatial Analytics for Social Good

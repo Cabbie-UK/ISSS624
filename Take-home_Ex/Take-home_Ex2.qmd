@@ -6,7 +6,9 @@ editor: visual
 
 ![](images/paste-FB8F42FF.png)
 
-First published on: 14-Dec-2022
+Updated on 17-Dec-2022
+
+(First published on: 14-Dec-2022)
 
 # Regionalising Nigeria using non-spatial attributes of water points and geospatial features
 
@@ -844,7 +846,7 @@ We then plot the tree by using `plot()` of R Graphics as shown in the code chunk
 plot(hclust_ward, cex = 0.5)
 ```
 
-### 7.5 Determine the Optimal Clusters using Gap Statistics
+### 7.5 Determine the Optimal Clusters
 
 There are 3 commonly used methods to determine the optimal clusters, they are:
 
@@ -1664,7 +1666,7 @@ tmap_arrange(non_geo_map, skater_map, geo_map,
 
 A conventional hierarchical clustering approach (Map 1)(and also Map 3) relies on optimising similarities/ dissimilarities between LGAs using the water point attributes. This resulted in many disjointed clusters/regions across Nigeria and does not meet our objective of regionalisation, which is to group LGAs into homogeneous [contiguous]{.underline} regions.
 
-Spatially constrained clustering methods such as SKATER and ClustGeo offer us avenues to take spatial contiguity into consideration when performing clustering. SKATER method uses spatial contiguity and edge cost to create a Minimum Spanning Tree. We then partition the tree by successive removal of edges that link dissimilar regions. The result is the division of the spatial objects into connected regions that have maximum internal homogeneity. In our analysis, 3 compact and contiguous regions are identified (Map 2). On the other hand, the ClustGeo method incorporates spatial constraints into a Ward-like hierarchical clustering algorithm. It allows us to use a mixing parameter to allocate the weights between "feature" and geographical constraint" space. This resulted in a hyrbid (or compromised) approach between spatial and non-spatial attributes (Map 3) where we see fewer contiguous regions formed as compared to the conventional hierarchical clustering approach. For our case, SKATER method appears to have given more emphasis on the spatial constraint, resulting in less distinct clusters (see discussion in Section 8.4). The appropriate clustering method to adopt will depend on the needs of the Nigeria administration or relevant stakeholders when splitting the LGAs into regions.
+Spatially constrained clustering methods such as SKATER and ClustGeo offer us avenues to take spatial contiguity into consideration when performing clustering. SKATER method uses spatial contiguity and edge cost to create a Minimum Spanning Tree. We then partition the tree by successive removal of edges that link dissimilar regions. The result is the division of the spatial objects into connected regions that have maximum internal homogeneity. In our analysis, 3 compact and contiguous regions are identified (Map 2). On the other hand, the ClustGeo method incorporates spatial constraints into a Ward-like hierarchical clustering algorithm. It allows us to use a mixing parameter to allocate the weights between "feature" and geographical constraint" space. This resulted in a hyrbid (or compromised) approach between spatial and non-spatial attributes (Map 4) where we see fewer contiguous regions formed as compared to the conventional hierarchical clustering approach. For our case, SKATER method appears to have given more emphasis on the spatial constraint, resulting in less distinct clusters (see discussion in Section 8.4). The appropriate clustering method to adopt will depend on the needs of the Nigeria administration or relevant stakeholders when splitting the LGAs into regions.
 
 The regionalisation exercise may appear incomplete as we have removed 13 LGAs with no water point from the analysis in Section 4.2. One suggestion is to regard these LGAs to be in the same region\\cluster as their neighboring LGAs for completeness. Any water point related considerations or follow-ups are unlikely to affect these LGAs since they have no water point on record.
 

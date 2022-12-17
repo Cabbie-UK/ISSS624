@@ -1,0 +1,582 @@
+---
+title: "In-Class Exercise 5"
+format: html
+author: "KB"
+editor: visual
+---
+
+First published on 17-Dec-2022
+
+# 7 Modeling the Spatial Variation of the Explanatory Factors of Water Point Status using Geographically Weighted Logistic Regression
+
+## 7.1 Overview
+
+In this exercise, we will build an explanatory model to discover factors affecting the water point status of Osun State in Nigeria. Osun is a state in southwestern Nigeria and is named after River Osun - a river which flows through the state. The state was established in Aug-1991 and is made up of 30 Local Government Areas (LGAs).
+
+![](images/paste-A1A34A59.png){fig-align="center" width="380"}
+
+## 7.2 The Data
+
+Two pre-processed data sets are used to build the explanatory model. They are:
+
+-   Osun.rds - it contains LGA boundaries of Osun State. It is in sf polygon data frame, and
+
+-   Osun_wp_sf.rds - it contains water points within the Osun State. It is in sf point data frame.
+
+## 7.3 Model Variables
+
+For the Logistic Regression Model that we are building, the following variables on water points are used:
+
+-   Dependent variable: Water point status:
+
+    -   Class 0: Non-functional water points
+
+    -   Class 1: Functional water points.
+
+        Water points with "Unknown" or "NA" status are excluded during pre-processing
+
+-   Independent variables:
+
+    -   distance_to_primary_road
+
+    -   distance_to_secondary_road
+
+    -   distance_to_tertiary_road
+
+    -   distance_to_city
+
+    -   distance_to_town
+
+    -   water_point_population
+
+    -   local_population_1km
+
+    -   usage_capacity
+
+    -   is_urban
+
+    -   water_source_clean
+
+        The first 7 variables are continuous variables while the remaining 3 are discrete variables.
+
+## 7.4 Getting Started
+
+The following packages are loaded into our R environment for the analysis:
+
+-   R package for building and validating binary logistic regression models - [**blorr**](https://cran.r-project.org/web/packages/blorr/vignettes/introduction.html)
+
+-   R package for calibrating geographical weighted family of models - [**GWmodel**](https://cran.r-project.org/web/packages/GWmodel/)
+
+-   R package for multivariate data visualisation and analysis - [**corrplot**](https://cran.r-project.org/web/packages/corrplot/vignettes/corrplot-intro.html)
+
+-   Spatial data handling - **sf, spdep**
+
+-   Attribute data handling - **tidyverse**, especially **readr**, **ggplot2** and **dplyr**
+
+-   Rapid Exploratory Data Analysis - **funModeling**
+
+-   Provide summary statistics about variables in data frames: **Skimr**, **caret**
+
+-   Choropleth mapping - **tmap, ggubr**
+
+We install and load the relevant packages using the following code chunk.
+
+```{r}
+pacman::p_load(blorr,corrplot, ggpubr, sf, spdep, GWmodel, tmap, tidyverse,  funModeling, skimr, caret)
+```
+
+## 7.5 Import the data sets in R environment
+
+The LGA boundaries of Osun State are imported and assigned to *Osun* with the following code chunk.
+
+```{r}
+Osun <- read_rds("In-Class_Ex5/rds/Osun.rds")
+```
+
+The water points are imported and assigned to *Osun_wp_sf* with the following code chunk.
+
+```{r}
+Osun_wp_sf <- read_rds("In-Class_Ex5/rds/Osun_wp_sf.rds")
+```
+
+## 7.6 **Exploratory Data Analysis (EDA)**
+
+### 7.6.1 Check the proportion of functional and non-functional water points
+
+We apply the following code to chart the status of water points in Osun
+
+```{r}
+Osun_wp_sf %>% freq(input = 'status')
+```
+
+We note that the % of non-functional water points is relatively high at 44.5%. At the same time, the proportion of both TRUE (functional) and FALSE (non-functional) classes are relatively balanced.
+
+To visualise where these water points are located in Osun, we plot them by their status on a map using the following code chunk
+
+```{r fig.size=8,fig.width=8}
+tmap_mode("view")
+
+actual_status <- tm_shape(Osun)+
+  #tmap_options(check.and.fix=TRUE)+
+  tm_polygons(alpha=0.4) +
+  tm_shape(Osun_wp_sf) +
+  tm_dots(col='status',
+          alpha=0.8,
+          palette = "RdBu") +
+  tm_view(set.zoom.limits = c(9,12)) + 
+  tm_layout(main.title = "Actual status of Water Points",
+            main.title.position = "center",
+            main.title.size = 1.0) 
+
+actual_status
+```
+
+### 7.6.2 Inspect the variables for variable type and missing values
+
+We use the `skim()` of **skimr** to get summary statistics of all the variables in the water point data frame, *Osun_wp_sf* .
+
+```{r}
+Osun_wp_sf %>%
+  skim()
+```
+
+Things to note in the generated results
+
+-   A frequency count of the data type of columns - character, logical, numeric - is provided.
+
+-   Variables with excessive missing values should not be used for linear and logistic regression modeling. For instance, *install_year* will give us an idea of the age of the water point and presumably older water points tend to be non_functional as compared to the newer ones. However, we don't use *install_year* for our model due to the high proportion of missing values (\~24% missing) in the column.
+
+-   Variables with a few missing values and assessed to be useful for the model can be included. We can remove the records with missing values from the data base. For our case, since water_point_population and local_population_1km only have 4 missing records, we will remove the 4 records and include the 2 variables for subsequent analysis. Using the results above, the number of missing values for each selected variable is as follow:
+
+    -   Status - 0 missing
+
+    -   distance_to_primary_road - 0 missing
+
+    -   distance_to_secondary_road - 0 missing
+
+    -   distance_to_tertiary_road - 0 missing
+
+    -   distance_to_city - 0 missing
+
+    -   distance_to_town - 0 missing
+
+    -   water_point_population - 4 missing
+
+    -   local_population_1km - 4 missing
+
+    -   usage_capacity - 0 missing
+
+    -   is_urban - 0 missing
+
+    -   water_source_clean - 0 missing
+
+        We use the following code chunk to filter out records with missing values for *water_point_population* and *local_population* columns. After running this code, we should observe that the number of records has by 4 from 4,760 to 4,756.
+
+```{r}
+Osun_wp_sf_clean <- Osun_wp_sf %>%
+  filter_at(vars(water_point_population,
+                 local_population_1km,
+                 ),
+            all_vars(!is.na(.)))
+```
+
+-   We note that usage_capacity is recognised as a numeric variable in R whereas it is more of a categorical variable denoting the type of water point. We change its data type to factor using the following code. After running this code, we should observe that usage capacity has been changed to "factor" type with 2 levels.
+
+```{r}
+Osun_wp_sf_clean <- Osun_wp_sf_clean %>%
+  mutate(usage_capacity = as.factor(usage_capacity))
+  
+```
+
+## 7.7 Correlation Analysis
+
+We first extract the selected variables from the *Osun_wp_sf_clean* and remove the geometry information from the data in order to construct a correlation matrix.
+
+```{r}
+Osun_wp <- Osun_wp_sf_clean %>%
+  select(c(7,35:39,42:43,46:47,57)) %>%
+  st_set_geometry(NULL)
+```
+
+Then, we plot the matrix for all the numeric variables (excluding the dependent variable).
+
+```{r fig.width=6,fig.height=6}
+cluster_vars.cor = cor(
+  Osun_wp[,2:7])
+
+corrplot.mixed(cluster_vars.cor,
+               lower = 'ellipse',
+               upper = "number",
+               tl.pos = "lt",
+               diag = "l",
+               tl.col= "black"
+               )
+
+```
+
+Based on the results above, there is no sign of multicollinearity among the 6 continuous variables since none of the absolute correlation value of the variable pairs is above 0.85. We will go ahead and use all the 6 variables for modelling.
+
+## 7.8 Build a Global (and non-spatial) Logistic Regression Model
+
+Logistic Regression is a type of Generalised Linear Model (GLM) and we use the `glm()` of R s**tats** to fit the model.
+
+```{r}
+model <- glm(status ~ distance_to_primary_road +
+               distance_to_secondary_road +
+               distance_to_tertiary_road +
+               distance_to_city + 
+               distance_to_town +
+               water_point_population +
+               local_population_1km +
+               usage_capacity +
+               is_urban +
+               water_source_clean,
+             data = Osun_wp_sf_clean,
+             family = binomial(link='logit'))
+
+```
+
+Instead of typing Model to view the results, we use the `blr_regress()` of **blorr** to produce a more informative report to help us examine the results of the model
+
+```{r}
+blr_regress(model)
+```
+
+Things to note from the report:
+
+-   *distance_to_primary_road* and *distance_to_secondary_road* have p-values that \> 0.05, we can remove these 2 variables from our model since they are not statistically significant
+
+-   For categorical variables, positive Estimate (or coefficient) value implies an above average correlation and a negative value implies below average correlation. The magnitude of the coefficient does not matter for categorical variables;
+
+-   For continuous variables, positive Estimate value implies direct correlation and a negative Estimate value implies an inverse correlation. The magnitude of the Estimate value provides the strength of the correlation.
+
+To appreciate the performance of the model, we generate the confusion matrix using *blr_confusion_matrix()* of **blorr.**
+
+```{r}
+# Probability cut-off threshold for Class 1 is set at 0.5
+blr_confusion_matrix(model,cutoff = 0.5)
+```
+
+The accuracy of the model is 0.6716 is a good start and it is better than a random guess with 0.5 accuracy.
+
+## 7.9 Build a Geographically Weighted Logistic Regression Model
+
+Now, we take into account the geographic information of the water points in our model.
+
+### 7.9.1 Convert the water point sf data frame to sp data frame
+
+First, we convert the *Osun_wp_sf_clean* data frame from sf to sp for GW modelling. This is because GWmodel is a relatively older package which can only work with sp data frames.
+
+::: callout-note
+## We have to use the *Osun_wp_sf_clean* instead of the *Osun_sp_sf* data frame as the latter contains missing values in the variables and this would result in error when running the GW model. 
+:::
+
+```{r}
+Osun_wp_sp <- Osun_wp_sf_clean %>%
+  select(c(status,
+            distance_to_primary_road,
+            distance_to_secondary_road,
+            distance_to_tertiary_road,
+            distance_to_city,
+            distance_to_town,
+            water_point_population,
+            local_population_1km,
+            usage_capacity,
+            is_urban,
+            water_source_clean)) %>%
+  as_Spatial()
+
+Osun_wp_sp
+```
+
+### 7.9.2 Derive a Fixed Bandwidth for the GWLR Model
+
+```{r}
+bw.fixed <- bw.ggwr(status ~ distance_to_primary_road +
+                      distance_to_secondary_road +
+                      distance_to_tertiary_road +
+                      distance_to_city + 
+                      distance_to_town +
+                      water_point_population +
+                      local_population_1km +
+                      usage_capacity +
+                      is_urban +
+                      water_source_clean,
+                data = Osun_wp_sp,
+                family = "binomial",
+                approach = "AIC",
+                kernel = "gaussian",
+                adaptive = FALSE,
+                longlat = FALSE)
+
+# Adaptaive is set to "FALSE" as we are computing fixed width
+# longlat is set to "FALSE" as we are using projected CRS (instead of coordinate points)
+```
+
+```{r}
+bw.fixed
+```
+
+The derived bandwidth is 2599.672 metres.
+
+### 7.9.3 Fit the Fixed Bandwidth and data into the GWLR model
+
+We fit the model using the bandwidth obtained above.
+
+```{r}
+gwlr.fixed <- ggwr.basic(status ~ distance_to_primary_road +
+                           distance_to_secondary_road +
+                           distance_to_tertiary_road +
+                           distance_to_city + 
+                           distance_to_town +
+                           water_point_population +
+                           local_population_1km +
+                           usage_capacity +
+                           is_urban +
+                           water_source_clean,
+                       data = Osun_wp_sp,
+                       bw=2599.672,
+                       family = "binomial",
+                       kernel = "gaussian",
+                       adaptive = FALSE,
+                       longlat = FALSE)
+```
+
+We call the model to view the results
+
+```{r}
+gwlr.fixed
+```
+
+Things to note:
+
+-   The report above has 2 sections -Global Logistic Regression (Global LR) model and Geographically Weighted Logistic Regression (GWLR) model results.
+
+-   The Global LR model's AICc is 5712.099 while the GWLR model's AICc is 4747.423. This shows that the GWLR model better fit the data than the Global LR.
+
+### 7.9.4 Model assessment and comparison
+
+To assess the performance of the gwlr, we will convert the SDF object to a data frame by using the code chunk below
+
+```{r}
+gwr.fixed <- as.data.frame(gwlr.fixed$SDF)
+```
+
+Next, we label *yhat* values (probability of water point being functional) greater or equal to 0.5 into 1 or else 0. The result of the logic comparison operation will be saved in a column called *most.*
+
+```{r}
+gwr.fixed <- gwr.fixed %>%
+  mutate(most = ifelse(
+    gwr.fixed$yhat >= 0.5,T,F))
+```
+
+Then we construct a confusion matrix using `confusionMatrix()` of **caret**.
+
+```{r}
+gwr.fixed$y <- as.factor(gwr.fixed$y)
+gwr.fixed$most <- as.factor(gwr.fixed$most)
+CM <- confusionMatrix(data=gwr.fixed$most,
+                      reference=gwr.fixed$y,
+                      positive="TRUE")
+
+CM
+```
+
+Things to note:
+
+-   Accuracy, Sensitivity and Specificity scores of the GWLR model has improved as compared to the Global LR model
+
+    | Model      | Accuracy | Sensitivity | Specificity |
+    |------------|----------|-------------|-------------|
+    | Global LR  | 0.6739   | 0.7207      | 0.6154      |
+    | GLWR Model | 0.8837   | 0.9005      | 0.8628      |
+
+-   Based on the above comparison, including spatial attributes will improve the explanatory power of the model. The results also show that the strategies to manage and maintain water points should be localised by taking into consideration the neighboring LGAs.
+
+### 7.9.5 Visualise the results of the GWLR model
+
+We will first extract the administrative boundary details into a new data frame.
+
+```{r}
+Osun_wp_sf_selected <- Osun_wp_sf_clean %>%
+  select(c(ADM2_EN, ADM2_PCODE,ADM1_EN,ADM1_PCODE,status))
+```
+
+Next, we will combine the new data frame with the model results
+
+```{r}
+gwr_sf.fixed <- cbind(Osun_wp_sf_selected, gwr.fixed)
+```
+
+Now we will plot the actual status of functional and non-functional water points (left map) and place the status generated by the gwlr model next to it (right map) for ease of comparison.
+
+```{r}
+tmap_mode("view")
+
+prob_T <- tm_shape(Osun) + 
+  tm_polygons(alpha = 0.1) +
+  tm_shape(gwr_sf.fixed) + 
+  tm_dots(col = "most",
+          border.col = "gray60",
+          border.lwd = 1) +
+  tm_layout(main.title = "Predicted Status of Water Points",
+            main.title.position = "center",
+            main.title.size = 1.0) +
+  tm_view(set.zoom.limits = c(9,12))
+  
+
+tmap_arrange(actual_status, prob_T, 
+             asp=1, ncol=2, nrow = 1,
+             sync = TRUE)
+```
+
+We can observe that the location of functional (TRUE) and non-functional (FALSE) water points on both plots are almost identical (justifying the 88% accuracy 😜) .
+
+## 7.10 Revised Global LR and GWLR models by removing the statistically non-significant dependent variables. 
+
+In Section 7.8 above, we discovered that *distance_to_primary_road* and *distance_to_secondary_road* are not statistically significant variables and can be excluded from the model. We will now update the Global LR and GWLR models by excluding the 2 variables. We will be largely repeating the steps covered in Sections 7.8 and 7.9.
+
+### 7.10.1 Build a Global Logistic Regression Model without non-significant dependent variables
+
+We fit the model in step 1 and then generate the model results in step 2
+
+```{r}
+# Step 1:
+revised_model <- glm(status ~ distance_to_tertiary_road +
+               distance_to_city +
+               distance_to_town +
+               is_urban +
+               usage_capacity +
+               water_source_clean +
+               water_point_population +
+               local_population_1km,
+             data = Osun_wp_sf_clean,
+             family = binomial(link = "logit"))
+
+# Step 2"
+blr_regress(revised_model)
+```
+
+-   We observe that the p-value of the remaining dependent variables are all \< 0.05, indicating that they are statisitically significant.
+
+Next, we evaluate the performance metrics of the model using `blr_confusion_matrix()` of **blorr.**
+
+```{r}
+blr_confusion_matrix(revised_model,cutoff = 0.5)
+```
+
+-   We note there's no substantial change in the Accuracy, Sensitivity and Specificity scores from the previous Global Logistic Regression model
+
+### 7.10.2 Derive the revised Fixed Bandwidth for the GWLR Model
+
+```{r}
+revised_bw.fixed <- bw.ggwr(status ~ distance_to_tertiary_road +
+                      distance_to_city + 
+                      distance_to_town +
+                      water_point_population +
+                      local_population_1km +
+                      usage_capacity +
+                      is_urban +
+                      water_source_clean,
+                data = Osun_wp_sp,
+                family = "binomial",
+                approach = "AIC",
+                kernel = "gaussian",
+                adaptive = FALSE,
+                longlat = FALSE)
+```
+
+```{r}
+revised_bw.fixed
+```
+
+The derived bandwidth is 2377.371 metres.
+
+### 7.10.3 Fit the revised Fixed Bandwidth and data to the GWLR model
+
+We fit a revised model using the updated bandwidth obtained above.
+
+```{r}
+revised_gwlr.fixed <- ggwr.basic(status ~ distance_to_tertiary_road +
+                           distance_to_city + 
+                           distance_to_town +
+                           water_point_population +
+                           local_population_1km +
+                           usage_capacity +
+                           is_urban +
+                           water_source_clean,
+                       data = Osun_wp_sp,
+                       bw=2377.371,
+                       family = "binomial",
+                       kernel = "gaussian",
+                       adaptive = FALSE,
+                       longlat = FALSE)
+```
+
+We review the results of the revised model.
+
+```{r}
+revised_gwlr.fixed
+```
+
+A comparison of the AICc of the models with and without the non-significant dependent variables is as follows:
+
+| Model      | With non-significant dependent variables | Without non-significant dependent variables |
+|------------|------------------------------------------|---------------------------------------------|
+| Global LR  | 5712.099                                 | 5708.923                                    |
+| GLWR Model | 4747.423                                 | 4744.213                                    |
+
+There is only a marginal change in the AICc results of the models after we remove the non-significant variables.
+
+We go on to assess the model performance of the revised GWLR model by constructing the confusion matrix using the `confusionMatrix()` of **caret**.
+
+```{r}
+# Step 1: Convert the SDF object of the gwlr model into a data frame
+revised_gwr.fixed <- as.data.frame(revised_gwlr.fixed$SDF)
+
+# Step 2: Include a new column most that indicate if the modelled results
+revised_gwr.fixed <- revised_gwr.fixed %>%
+  mutate(most = ifelse(
+    revised_gwr.fixed$yhat >= 0.5,T,F))
+
+# Step 3: Generate the performance metrics
+revised_gwr.fixed$y <- as.factor(revised_gwr.fixed$y)
+revised_gwr.fixed$most <- as.factor(revised_gwr.fixed$most)
+CM <- confusionMatrix(data=revised_gwr.fixed$most,
+                      reference=revised_gwr.fixed$y,
+                      positive="TRUE")
+
+CM
+```
+
+We tabulate the performance metrics of the 4 models as follow
+
++---------------------------------------------------+----------+-------------+-------------+
+| Model                                             | Accuracy | Sensitivity | Specificity |
++===================================================+==========+=============+=============+
+| Global LR                                         | 0.6739   | 0.7207      | 0.6154      |
+|                                                   |          |             |             |
+| (With non-significant dependent variables)        |          |             |             |
++---------------------------------------------------+----------+-------------+-------------+
+| GLWR Model                                        | 0.8837   | 0.9005      | 0.8628      |
+|                                                   |          |             |             |
+| (With non-significant dependent variables)        |          |             |             |
++---------------------------------------------------+----------+-------------+-------------+
+| Global LR                                         | 0.6726   | 0.7188      | 0.6149      |
+|                                                   |          |             |             |
+| (**Without** non-significant dependent variables) |          |             |             |
++---------------------------------------------------+----------+-------------+-------------+
+| GLWR Model                                        | 0.8846   | 0.8986      | 0.8671      |
+|                                                   |          |             |             |
+| (**Without** non-significant dependent variables) |          |             |             |
++---------------------------------------------------+----------+-------------+-------------+
+
+As we can see from the above, the inclusion of statistically non-significant variables do not adversely affect the performance of logistic regression models (differences of \<0.01), be it non-spatial or geographically weighted. For computational efficiency, we should exclude the dependent variables (i.e. noise) from the modelling process once they are determined to be non-significant. Also, from an explanatory modelling perspective, the results above provide evidence that the distance of water points to primary or secondary roads are not relevant to the functional status of the water points.
+
+## 7.11 Conclusion
+
+From the data that is used for modelling, it is evident from the generated AICc that Geographically Weighted models provide better explanatory power about the status of the water points as compared to a non-spatial (or Global) Logistic Regression models. The administrators of Osun State Nigeria could make use of the coefficient estimates derived for the 8 dependent variables of each water point to understand the factors that contribute to its functional status and device measures to prevent the water point from malfunctioning.
+
+## References
+
+-   Wikipedia write-up on Osun State of Nigeria, [Osun State - Wikipedia](https://en.wikipedia.org/wiki/Osun_State)

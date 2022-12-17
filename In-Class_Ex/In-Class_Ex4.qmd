@@ -6,7 +6,9 @@ execute:
   warning: false
 ---
 
-First published on: 10-Dec-2022
+Updated on 16-Dec-2022
+
+(First published on: 10-Dec-2022)
 
 # 6 Calibrate Hedonic Pricing Model for Private Highrise Property with GWR Method
 
@@ -394,7 +396,7 @@ summary(condo.mlr)
 With reference to the report above, it is clear that not all the independent variables are statistically significant. We will revise the model by removing those variables which are not statistically significant.
 
 ::: callout-note
-## Alternatively, we can conduct a stepwsie regression to identity the more significant independent variables.
+## Alternatively, we can conduct a stepwsie regression to identify the more significant independent variables.
 :::
 
 Now, we are ready to calibrate a revised model by using the code chunk below.
@@ -467,7 +469,7 @@ In this section, we would use a fantastic R package specially programmed for per
 In the code chunk below, the [`ols_vif_tol()`](https://olsrr.rsquaredacademy.com/reference/ols_coll_diag.html) of **olsrr** package is used to test if there are sign of multicollinearity.
 
 ::: callout-note
-## We conduct this 2nd round of multicollinearity after fitting the lm model using the VIF measure.
+## We conduct this 2nd round of multicollinearity check after fitting the lm model by using the VIF measure.
 :::
 
 ```{r}
@@ -668,7 +670,7 @@ The output is saved in a list of class "gwrm". The code below is used to display
 gwr.fixed
 ```
 
-The report shows that the AICc of the gwr is 42263.61 which is significantly smaller than the globel multiple linear regression model of 42967.14.
+The report shows that the AICc of the gwr is 42263.61 which is significantly smaller than the global multiple linear regression model of 42967.14.
 
 ### 6.9.2 Build Adaptive Bandwidth GWR Model
 
